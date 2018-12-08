@@ -1848,6 +1848,103 @@ var dragonBones;
     /**
      * @private
      */
+    var ConstraintData = /** @class */ (function (_super) {
+        __extends(ConstraintData, _super);
+        function ConstraintData() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        ConstraintData.prototype._onClear = function () {
+            this.order = 0;
+            this.name = "";
+            this.type = 0 /* IK */;
+            this.target = null; //
+            this.root = null; //
+            this.bone = null;
+        };
+        return ConstraintData;
+    }(dragonBones.BaseObject));
+    dragonBones.ConstraintData = ConstraintData;
+    /**
+     * @internal
+     */
+    var IKConstraintData = /** @class */ (function (_super) {
+        __extends(IKConstraintData, _super);
+        function IKConstraintData() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        IKConstraintData.toString = function () {
+            return "[class dragonBones.IKConstraintData]";
+        };
+        IKConstraintData.prototype._onClear = function () {
+            _super.prototype._onClear.call(this);
+            this.scaleEnabled = false;
+            this.bendPositive = false;
+            this.weight = 1.0;
+        };
+        return IKConstraintData;
+    }(ConstraintData));
+    dragonBones.IKConstraintData = IKConstraintData;
+    /**
+     * @internal
+     */
+    var PathConstraintData = /** @class */ (function (_super) {
+        __extends(PathConstraintData, _super);
+        function PathConstraintData() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.bones = [];
+            return _this;
+        }
+        PathConstraintData.toString = function () {
+            return "[class dragonBones.PathConstraintData]";
+        };
+        PathConstraintData.prototype._onClear = function () {
+            _super.prototype._onClear.call(this);
+            this.pathSlot = null;
+            this.pathDisplayData = null;
+            this.bones.length = 0;
+            this.positionMode = 0 /* Fixed */;
+            this.spacingMode = 1 /* Fixed */;
+            this.rotateMode = 1 /* Chain */;
+            this.position = 0.0;
+            this.spacing = 0.0;
+            this.rotateOffset = 0.0;
+            this.rotateMix = 0.0;
+            this.translateMix = 0.0;
+        };
+        PathConstraintData.prototype.AddBone = function (value) {
+            this.bones.push(value);
+        };
+        return PathConstraintData;
+    }(ConstraintData));
+    dragonBones.PathConstraintData = PathConstraintData;
+})(dragonBones || (dragonBones = {}));
+/**
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2012-2018 DragonBones team and other contributors
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+var dragonBones;
+(function (dragonBones) {
+    /**
+     * @private
+     */
     var CanvasData = /** @class */ (function (_super) {
         __extends(CanvasData, _super);
         function CanvasData() {
@@ -1970,103 +2067,6 @@ var dragonBones;
         return SkinData;
     }(dragonBones.BaseObject));
     dragonBones.SkinData = SkinData;
-})(dragonBones || (dragonBones = {}));
-/**
- * The MIT License (MIT)
- *
- * Copyright (c) 2012-2018 DragonBones team and other contributors
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of
- * this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
- * the Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
- * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
- * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-var dragonBones;
-(function (dragonBones) {
-    /**
-     * @private
-     */
-    var ConstraintData = /** @class */ (function (_super) {
-        __extends(ConstraintData, _super);
-        function ConstraintData() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        ConstraintData.prototype._onClear = function () {
-            this.order = 0;
-            this.name = "";
-            this.type = 0 /* IK */;
-            this.target = null; //
-            this.root = null; //
-            this.bone = null;
-        };
-        return ConstraintData;
-    }(dragonBones.BaseObject));
-    dragonBones.ConstraintData = ConstraintData;
-    /**
-     * @internal
-     */
-    var IKConstraintData = /** @class */ (function (_super) {
-        __extends(IKConstraintData, _super);
-        function IKConstraintData() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        IKConstraintData.toString = function () {
-            return "[class dragonBones.IKConstraintData]";
-        };
-        IKConstraintData.prototype._onClear = function () {
-            _super.prototype._onClear.call(this);
-            this.scaleEnabled = false;
-            this.bendPositive = false;
-            this.weight = 1.0;
-        };
-        return IKConstraintData;
-    }(ConstraintData));
-    dragonBones.IKConstraintData = IKConstraintData;
-    /**
-     * @internal
-     */
-    var PathConstraintData = /** @class */ (function (_super) {
-        __extends(PathConstraintData, _super);
-        function PathConstraintData() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.bones = [];
-            return _this;
-        }
-        PathConstraintData.toString = function () {
-            return "[class dragonBones.PathConstraintData]";
-        };
-        PathConstraintData.prototype._onClear = function () {
-            _super.prototype._onClear.call(this);
-            this.pathSlot = null;
-            this.pathDisplayData = null;
-            this.bones.length = 0;
-            this.positionMode = 0 /* Fixed */;
-            this.spacingMode = 1 /* Fixed */;
-            this.rotateMode = 1 /* Chain */;
-            this.position = 0.0;
-            this.spacing = 0.0;
-            this.rotateOffset = 0.0;
-            this.rotateMix = 0.0;
-            this.translateMix = 0.0;
-        };
-        PathConstraintData.prototype.AddBone = function (value) {
-            this.bones.push(value);
-        };
-        return PathConstraintData;
-    }(ConstraintData));
-    dragonBones.PathConstraintData = PathConstraintData;
 })(dragonBones || (dragonBones = {}));
 /**
  * The MIT License (MIT)
@@ -15159,726 +15159,4 @@ var dragonBones;
         return BuildArmaturePackage;
     }());
     dragonBones.BuildArmaturePackage = BuildArmaturePackage;
-})(dragonBones || (dragonBones = {}));
-/**
- * The MIT License (MIT)
- *
- * Copyright (c) 2012-2018 DragonBones team and other contributors
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of
- * this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
- * the Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
- * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
- * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-var dragonBones;
-(function (dragonBones) {
-    /**
-     * - The Phaser texture atlas data.
-     * @version DragonBones 3.0
-     * @language en_US
-     */
-    /**
-     * - Phaser 贴图集数据。
-     * @version DragonBones 3.0
-     * @language zh_CN
-     */
-    var PhaserTextureAtlasData = /** @class */ (function (_super) {
-        __extends(PhaserTextureAtlasData, _super);
-        function PhaserTextureAtlasData() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this._renderTexture = null; // Initial value.
-            return _this;
-        }
-        PhaserTextureAtlasData.toString = function () {
-            return "[class dragonBones.PhaserTextureAtlasData]";
-        };
-        PhaserTextureAtlasData.prototype._onClear = function () {
-            _super.prototype._onClear.call(this);
-            if (this._renderTexture !== null) {
-                this._renderTexture.destroy();
-            }
-            this._renderTexture = null;
-        };
-        /**
-         * @inheritDoc
-         */
-        PhaserTextureAtlasData.prototype.createTexture = function () {
-            return dragonBones.BaseObject.borrowObject(PhaserTextureData);
-        };
-        Object.defineProperty(PhaserTextureAtlasData.prototype, "renderTexture", {
-            /**
-             * - The Phaser texture.
-             * @version DragonBones 3.0
-             * @language en_US
-             */
-            /**
-             * - Phaser 贴图。
-             * @version DragonBones 3.0
-             * @language zh_CN
-             */
-            get: function () {
-                return this._renderTexture;
-            },
-            set: function (value) {
-                if (this._renderTexture === value) {
-                    return;
-                }
-                // TODO destroy prev texture.
-                this._renderTexture = value;
-                if (this._renderTexture !== null) {
-                    var index = 0;
-                    for (var k in this.textures) {
-                        var textureData = this.textures[k];
-                        textureData.renderTexture = this._renderTexture.add(k, index++, textureData.region.x, textureData.region.y, textureData.region.width, textureData.region.height);
-                    }
-                }
-                else {
-                    for (var k in this.textures) {
-                        var textureData = this.textures[k];
-                        textureData.renderTexture = null;
-                    }
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        return PhaserTextureAtlasData;
-    }(dragonBones.TextureAtlasData));
-    dragonBones.PhaserTextureAtlasData = PhaserTextureAtlasData;
-    /**
-     * @internal
-     */
-    var PhaserTextureData = /** @class */ (function (_super) {
-        __extends(PhaserTextureData, _super);
-        function PhaserTextureData() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.renderTexture = null; // Initial value.
-            return _this;
-        }
-        PhaserTextureData.toString = function () {
-            return "[class dragonBones.PhaserTextureData]";
-        };
-        PhaserTextureData.prototype._onClear = function () {
-            _super.prototype._onClear.call(this);
-            if (this.renderTexture !== null) {
-                this.renderTexture.destroy();
-            }
-            this.renderTexture = null;
-        };
-        return PhaserTextureData;
-    }(dragonBones.TextureData));
-    dragonBones.PhaserTextureData = PhaserTextureData;
-})(dragonBones || (dragonBones = {}));
-/**
- * The MIT License (MIT)
- *
- * Copyright (c) 2012-2018 DragonBones team and other contributors
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of
- * this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
- * the Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
- * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
- * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-var dragonBones;
-(function (dragonBones) {
-    /**
-     * @inheritDoc
-     */
-    var PhaserArmatureDisplay = /** @class */ (function (_super) {
-        __extends(PhaserArmatureDisplay, _super);
-        function PhaserArmatureDisplay() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            /**
-             * @private
-             */
-            _this.debugDraw = false;
-            _this._debugDraw = false;
-            _this._armature = null;
-            _this._eventDispatcher = new Phaser.Events.EventEmitter();
-            return _this;
-        }
-        /**
-         * @inheritDoc
-         */
-        PhaserArmatureDisplay.prototype.dbInit = function (armature) {
-            this._armature = armature;
-        };
-        /**
-         * @inheritDoc
-         */
-        PhaserArmatureDisplay.prototype.dbClear = function () {
-            this._eventDispatcher.destroy();
-            // this._armature = null as any;
-            // this._debugDrawer = null;
-            _super.prototype.destroy.call(this);
-        };
-        /**
-         * @inheritDoc
-         */
-        PhaserArmatureDisplay.prototype.dbUpdate = function () {
-        };
-        PhaserArmatureDisplay.prototype.dispose = function (_disposeProxy) {
-            if (_disposeProxy === void 0) { _disposeProxy = true; }
-            if (this._armature !== null) {
-                this._armature.dispose();
-                this._armature = null;
-            }
-        };
-        PhaserArmatureDisplay.prototype.destroy = function () {
-            this.dispose();
-        };
-        /**
-         * @private
-         */
-        PhaserArmatureDisplay.prototype.dispatchDBEvent = function (type, eventObject) {
-            this._eventDispatcher.emit(type, eventObject);
-        };
-        PhaserArmatureDisplay.prototype.hasDBEventListener = function (type) {
-            return type in this._eventDispatcher.eventNames;
-        };
-        PhaserArmatureDisplay.prototype.addDBEventListener = function (type, listener, target) {
-            this._eventDispatcher.addListener(type, listener, target);
-        };
-        PhaserArmatureDisplay.prototype.removeDBEventListener = function (type, listener, target) {
-            this._eventDispatcher.removeListener(type, listener, target, false);
-        };
-        Object.defineProperty(PhaserArmatureDisplay.prototype, "armature", {
-            get: function () {
-                return this._armature;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(PhaserArmatureDisplay.prototype, "animation", {
-            get: function () {
-                return this._armature.animation;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        return PhaserArmatureDisplay;
-    }(Phaser.GameObjects.Container));
-    dragonBones.PhaserArmatureDisplay = PhaserArmatureDisplay;
-})(dragonBones || (dragonBones = {}));
-/**
- * The MIT License (MIT)
- *
- * Copyright (c) 2012-2018 DragonBones team and other contributors
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of
- * this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
- * the Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
- * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
- * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-var dragonBones;
-(function (dragonBones) {
-    /**
-     * - The Phaser slot.
-     * @version DragonBones 5.6
-     * @language en_US
-     */
-    /**
-     * - Phaser 插槽。
-     * @version DragonBones 5.6
-     * @language zh_CN
-     */
-    var PhaserSlot = /** @class */ (function (_super) {
-        __extends(PhaserSlot, _super);
-        function PhaserSlot() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        PhaserSlot.toString = function () {
-            return "[class dragonBones.PhaserSlot]";
-        };
-        PhaserSlot.prototype._onClear = function () {
-            _super.prototype._onClear.call(this);
-            this._textureScale = 1.0;
-            this._renderDisplay = null;
-        };
-        PhaserSlot.prototype._initDisplay = function (_value, _isRetain) {
-        };
-        PhaserSlot.prototype._disposeDisplay = function (value, isRelease) {
-            if (!isRelease) {
-                value.destroy();
-            }
-        };
-        PhaserSlot.prototype._onUpdateDisplay = function () {
-            this._renderDisplay = (this._display ? this._display : this._rawDisplay);
-        };
-        PhaserSlot.prototype._addDisplay = function () {
-            var container = this._armature.display;
-            container.add(this._renderDisplay);
-        };
-        PhaserSlot.prototype._replaceDisplay = function (value) {
-            var container = this._armature.display;
-            var prevDisplay = value;
-            container.add(this._renderDisplay);
-            container.swap(this._renderDisplay, prevDisplay);
-            container.remove(prevDisplay);
-            this._textureScale = 1.0;
-        };
-        PhaserSlot.prototype._removeDisplay = function () {
-            this._renderDisplay.parentContainer.remove(this._renderDisplay);
-        };
-        PhaserSlot.prototype._updateZOrder = function () {
-            var container = this._armature.display;
-            var index = container.getIndex(this._renderDisplay);
-            if (index === this._zOrder) {
-                return;
-            }
-            container.addAt(this._renderDisplay, this._zOrder);
-        };
-        /**
-         * @internal
-         */
-        PhaserSlot.prototype._updateVisible = function () {
-            this._renderDisplay.setVisible(this._parent.visible && this._visible);
-        };
-        PhaserSlot.prototype._updateBlendMode = function () {
-            switch (this._blendMode) {
-                case 0 /* Normal */:
-                    this._renderDisplay.blendMode = Phaser.BlendModes.NORMAL;
-                    break;
-                case 1 /* Add */:
-                    this._renderDisplay.blendMode = Phaser.BlendModes.ADD;
-                    break;
-                case 3 /* Darken */:
-                    this._renderDisplay.blendMode = Phaser.BlendModes.DARKEN;
-                    break;
-                case 4 /* Difference */:
-                    this._renderDisplay.blendMode = Phaser.BlendModes.DIFFERENCE;
-                    break;
-                case 6 /* HardLight */:
-                    this._renderDisplay.blendMode = Phaser.BlendModes.HARD_LIGHT;
-                    break;
-                case 9 /* Lighten */:
-                    this._renderDisplay.blendMode = Phaser.BlendModes.LIGHTEN;
-                    break;
-                case 10 /* Multiply */:
-                    this._renderDisplay.blendMode = Phaser.BlendModes.MULTIPLY;
-                    break;
-                case 11 /* Overlay */:
-                    this._renderDisplay.blendMode = Phaser.BlendModes.OVERLAY;
-                    break;
-                case 12 /* Screen */:
-                    this._renderDisplay.blendMode = Phaser.BlendModes.SCREEN;
-                    break;
-                default:
-                    break;
-            }
-            // TODO child armature.
-        };
-        PhaserSlot.prototype._updateColor = function () {
-            var alpha = this._colorTransform.alphaMultiplier * this._globalAlpha;
-            this._renderDisplay.setAlpha(alpha);
-            // TODO color.
-            // TODO child armature.
-        };
-        PhaserSlot.prototype._updateFrame = function () {
-            var currentTextureData = this._textureData;
-            if (this._displayIndex >= 0 && this._display !== null && currentTextureData !== null) {
-                var currentTextureAtlasData = currentTextureData.parent;
-                if (this._armature.replacedTexture !== null) { // Update replaced texture atlas.
-                    if (this._armature._replaceTextureAtlasData === null) {
-                        currentTextureAtlasData = dragonBones.BaseObject.borrowObject(dragonBones.PhaserTextureAtlasData);
-                        currentTextureAtlasData.copyFrom(currentTextureData.parent);
-                        currentTextureAtlasData.renderTexture = this._armature.replacedTexture;
-                        this._armature._replaceTextureAtlasData = currentTextureAtlasData;
-                    }
-                    else {
-                        currentTextureAtlasData = this._armature._replaceTextureAtlasData;
-                    }
-                    currentTextureData = currentTextureAtlasData.getTexture(currentTextureData.name);
-                }
-                var renderTexture = currentTextureData.renderTexture;
-                if (renderTexture !== null) {
-                    if (this._geometryData !== null) { // Mesh.
-                        var data = this._geometryData.data;
-                        var intArray = data.intArray;
-                        var floatArray = data.floatArray;
-                        var vertexCount = intArray[this._geometryData.offset + 0 /* GeometryVertexCount */];
-                        var triangleCount = intArray[this._geometryData.offset + 1 /* GeometryTriangleCount */];
-                        var vertexOffset = intArray[this._geometryData.offset + 2 /* GeometryFloatOffset */];
-                        if (vertexOffset < 0) {
-                            vertexOffset += 65536; // Fixed out of bounds bug. 
-                        }
-                        var uvOffset = vertexOffset + vertexCount * 2;
-                        var scale = this._armature._armatureData.scale;
-                        var meshDisplay = this._renderDisplay;
-                        meshDisplay.vertices = new Float32Array(triangleCount * 3 * 2);
-                        meshDisplay.uv = new Float32Array(triangleCount * 3 * 2);
-                        // meshDisplay.vertices = new Float32Array(vertexCount * 2);
-                        // meshDisplay.uv = new Float32Array(vertexCount * 2);
-                        // meshDisplay.indices = new Uint16Array(triangleCount * 2); // Phaser3 do not have indices.
-                        /*
-                        for (let i = 0, l = vertexCount * 2; i < l; ++i) {
-                            meshDisplay.vertices[i] = floatArray[vertexOffset + i] * scale;
-                            meshDisplay.uv[i] = floatArray[uvOffset + i];
-                        }
-                        */
-                        for (var i = 0; i < triangleCount * 3; ++i) {
-                            // the idx is vertex idx, not float numbers idx
-                            var idx = intArray[this._geometryData.offset + 4 /* GeometryVertexIndices */ + i];
-                            meshDisplay.vertices[i * 2] = floatArray[vertexOffset + idx * 2] * scale; // x
-                            meshDisplay.vertices[i * 2 + 1] = floatArray[vertexOffset + idx * 2 + 1] * scale; // y
-                            meshDisplay.uv[i * 2] = floatArray[uvOffset + idx * 2]; // u
-                            meshDisplay.uv[i * 2 + 1] = floatArray[uvOffset + idx * 2 + 1]; // v
-                            // meshDisplay.indices[i] = intArray[this._geometryData.offset + BinaryOffset.GeometryVertexIndices + i];
-                        }
-                        meshDisplay.setTexture(currentTextureAtlasData.name, currentTextureData.name);
-                        var isSkinned = this._geometryData.weight !== null;
-                        var isSurface = this._parent._boneData.type !== 0 /* Bone */;
-                        if (isSkinned || isSurface) {
-                            this._identityTransform();
-                        }
-                    }
-                    else { // Normal texture.
-                        this._textureScale = currentTextureData.parent.scale * this._armature._armatureData.scale;
-                        this._renderDisplay.setTexture(currentTextureAtlasData.name, currentTextureData.name);
-                    }
-                    this._visibleDirty = true;
-                    return;
-                }
-            }
-            var normalDisplay = this._renderDisplay;
-            normalDisplay.x = 0.0;
-            normalDisplay.y = 0.0;
-            normalDisplay.setVisible(false);
-        };
-        PhaserSlot.prototype._updateMesh = function () {
-            var scale = this._armature._armatureData.scale;
-            var deformVertices = this._displayFrame.deformVertices;
-            var bones = this._geometryBones;
-            var geometryData = this._geometryData;
-            var weightData = geometryData.weight;
-            var hasDeform = deformVertices.length > 0 && geometryData.inheritDeform;
-            var meshDisplay = this._renderDisplay;
-            if (weightData !== null) {
-                var data = geometryData.data;
-                var intArray = data.intArray;
-                var floatArray = data.floatArray;
-                var vertexCount = intArray[geometryData.offset + 0 /* GeometryVertexCount */];
-                var weightFloatOffset = intArray[weightData.offset + 1 /* WeigthFloatOffset */];
-                if (weightFloatOffset < 0) {
-                    weightFloatOffset += 65536; // Fixed out of bounds bug. 
-                }
-                for (var i = 0, iD = 0, iB = weightData.offset + 2 /* WeigthBoneIndices */ + bones.length, iV = weightFloatOffset, iF = 0; i < vertexCount; ++i) {
-                    var boneCount = intArray[iB++];
-                    var xG = 0.0, yG = 0.0;
-                    for (var j = 0; j < boneCount; ++j) {
-                        var boneIndex = intArray[iB++];
-                        var bone = bones[boneIndex];
-                        if (bone !== null) {
-                            var matrix = bone.globalTransformMatrix;
-                            var weight = floatArray[iV++];
-                            var xL = floatArray[iV++] * scale;
-                            var yL = floatArray[iV++] * scale;
-                            if (hasDeform) {
-                                xL += deformVertices[iF++];
-                                yL += deformVertices[iF++];
-                            }
-                            xG += (matrix.a * xL + matrix.c * yL + matrix.tx) * weight;
-                            yG += (matrix.b * xL + matrix.d * yL + matrix.ty) * weight;
-                        }
-                    }
-                    meshDisplay.vertices[iD++] = xG;
-                    meshDisplay.vertices[iD++] = yG;
-                }
-            }
-            else {
-                var isSurface = this._parent._boneData.type !== 0 /* Bone */;
-                var data = geometryData.data;
-                var intArray = data.intArray;
-                var floatArray = data.floatArray;
-                var vertexCount = intArray[geometryData.offset + 0 /* GeometryVertexCount */];
-                var vertexOffset = intArray[geometryData.offset + 2 /* GeometryFloatOffset */];
-                if (vertexOffset < 0) {
-                    vertexOffset += 65536; // Fixed out of bounds bug. 
-                }
-                for (var i = 0, l = vertexCount * 2; i < l; i += 2) {
-                    var x = floatArray[vertexOffset + i] * scale;
-                    var y = floatArray[vertexOffset + i + 1] * scale;
-                    if (hasDeform) {
-                        x += deformVertices[i];
-                        y += deformVertices[i + 1];
-                    }
-                    if (isSurface) {
-                        var matrix = this._parent._getGlobalTransformMatrix(x, y);
-                        meshDisplay.vertices[i] = matrix.a * x + matrix.c * y + matrix.tx;
-                        meshDisplay.vertices[i + 1] = matrix.b * x + matrix.d * y + matrix.ty;
-                    }
-                    else {
-                        meshDisplay.vertices[i] = x;
-                        meshDisplay.vertices[i + 1] = y;
-                    }
-                }
-            }
-        };
-        PhaserSlot.prototype._updateTransform = function () {
-            this.updateGlobalTransform(); // Update transform.
-            var transform = this.global;
-            if (this._renderDisplay === this._rawDisplay || this._renderDisplay === this._meshDisplay) {
-                var x = transform.x - (this.globalTransformMatrix.a * this._pivotX + this.globalTransformMatrix.c * this._pivotY);
-                var y = transform.y - (this.globalTransformMatrix.b * this._pivotX + this.globalTransformMatrix.d * this._pivotY);
-                this._renderDisplay.x = x;
-                this._renderDisplay.y = y;
-            }
-            else {
-                this._renderDisplay.x = transform.x;
-                this._renderDisplay.y = transform.y;
-            }
-            this._renderDisplay.rotation = transform.rotation;
-            // (this._renderDisplay as any).skew = transform.skew; // Phase can not support skew.
-            this._renderDisplay.setScale(transform.scaleX * this._textureScale, transform.scaleY * this._textureScale);
-        };
-        PhaserSlot.prototype._identityTransform = function () {
-            this._renderDisplay.setPosition();
-            this._renderDisplay.setRotation();
-            this._renderDisplay.setScale(1.0, 1.0);
-            // TODO Phase can not support skew.
-        };
-        return PhaserSlot;
-    }(dragonBones.Slot));
-    dragonBones.PhaserSlot = PhaserSlot;
-})(dragonBones || (dragonBones = {}));
-/**
- * The MIT License (MIT)
- *
- * Copyright (c) 2012-2018 DragonBones team and other contributors
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of
- * this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
- * the Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
- * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
- * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-var dragonBones;
-(function (dragonBones) {
-    /**
-     * - The Phaser factory.
-     * @version DragonBones 3.0
-     * @language en_US
-     */
-    /**
-     * - Phaser 工厂。
-     * @version DragonBones 3.0
-     * @language zh_CN
-     */
-    var PhaserFactory = /** @class */ (function (_super) {
-        __extends(PhaserFactory, _super);
-        /**
-         * @inheritDoc
-         */
-        function PhaserFactory(dataParser) {
-            if (dataParser === void 0) { dataParser = null; }
-            var _this = _super.call(this, dataParser) || this;
-            _this._dragonBones = PhaserFactory._dragonBonesInstance;
-            return _this;
-        }
-        PhaserFactory.init = function (game, scene) {
-            this._scene = scene;
-            this._game = game;
-            if (this._dragonBonesInstance === null) {
-                var eventManager = new dragonBones.PhaserArmatureDisplay(this._scene);
-                this._dragonBonesInstance = new dragonBones.DragonBones(eventManager);
-            }
-            // (this._dragonBonesInstance.eventManager as PhaserArmatureDisplay).addTo(this._scene); // TODO how to add new scene.
-        };
-        Object.defineProperty(PhaserFactory, "factory", {
-            /**
-             * - A global factory instance that can be used directly.
-             * @version DragonBones 4.7
-             * @language en_US
-             */
-            /**
-             * - 一个可以直接使用的全局工厂实例。
-             * @version DragonBones 4.7
-             * @language zh_CN
-             */
-            get: function () {
-                if (this._factory === null) {
-                    this._factory = new PhaserFactory();
-                }
-                return this._factory;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        PhaserFactory.prototype._isSupportMesh = function () {
-            //console.warn("Phaser can not support mesh.");
-            console.log("Customize mesh support for phaser!!");
-            return false;
-        };
-        PhaserFactory.prototype._buildTextureAtlasData = function (textureAtlasData, textureAtlas) {
-            if (textureAtlasData) {
-                textureAtlasData.renderTexture = textureAtlas;
-            }
-            else {
-                textureAtlasData = dragonBones.BaseObject.borrowObject(dragonBones.PhaserTextureAtlasData);
-            }
-            return textureAtlasData;
-        };
-        PhaserFactory.prototype._buildArmature = function (dataPackage) {
-            var armature = dragonBones.BaseObject.borrowObject(dragonBones.Armature);
-            var armatureDisplay = new dragonBones.PhaserArmatureDisplay(PhaserFactory._scene);
-            armature.init(dataPackage.armature, armatureDisplay, armatureDisplay, this._dragonBones);
-            return armature;
-        };
-        PhaserFactory.prototype._buildSlot = function (dataPackage, slotData, armature) {
-            // tslint:disable-next-line:no-unused-expression
-            dataPackage;
-            // tslint:disable-next-line:no-unused-expression
-            armature;
-            var slot = dragonBones.BaseObject.borrowObject(dragonBones.PhaserSlot);
-            var rawDisplay = new Phaser.GameObjects.Image(PhaserFactory._scene, 0.0, 0.0, null); // TODO how to set empty texture.
-            slot.init(slotData, armature, rawDisplay, rawDisplay);
-            return slot;
-        };
-        /**
-         * - Create a armature from cached DragonBonesData instances and TextureAtlasData instances, then use the {@link #clock} to update it.
-         * The difference is that the armature created by {@link #buildArmature} is not WorldClock instance update.
-         * @param armatureName - The armature data name.
-         * @param dragonBonesName - The cached name of the DragonBonesData instance. (If not set, all DragonBonesData instances are retrieved, and when multiple DragonBonesData instances contain a the same name armature data, it may not be possible to accurately create a specific armature)
-         * @param skinName - The skin name, you can set a different ArmatureData name to share it's skin data. (If not set, use the default skin data)
-         * @returns The armature display container.
-         * @version DragonBones 4.5
-         * @example
-         * <pre>
-         *     let armatureDisplay = factory.buildArmatureDisplay("armatureName", "dragonBonesName");
-         * </pre>
-         * @language en_US
-         */
-        /**
-         * - 通过缓存的 DragonBonesData 实例和 TextureAtlasData 实例创建一个骨架，并用 {@link #clock} 更新该骨架。
-         * 区别在于由 {@link #buildArmature} 创建的骨架没有 WorldClock 实例驱动。
-         * @param armatureName - 骨架数据名称。
-         * @param dragonBonesName - DragonBonesData 实例的缓存名称。 （如果未设置，将检索所有的 DragonBonesData 实例，当多个 DragonBonesData 实例中包含同名的骨架数据时，可能无法准确的创建出特定的骨架）
-         * @param skinName - 皮肤名称，可以设置一个其他骨架数据名称来共享其皮肤数据。 （如果未设置，则使用默认的皮肤数据）
-         * @returns 骨架的显示容器。
-         * @version DragonBones 4.5
-         * @example
-         * <pre>
-         *     let armatureDisplay = factory.buildArmatureDisplay("armatureName", "dragonBonesName");
-         * </pre>
-         * @language zh_CN
-         */
-        PhaserFactory.prototype.buildArmatureDisplay = function (armatureName, dragonBonesName, skinName, textureAtlasName) {
-            if (dragonBonesName === void 0) { dragonBonesName = ""; }
-            if (skinName === void 0) { skinName = ""; }
-            if (textureAtlasName === void 0) { textureAtlasName = ""; }
-            var armature = this.buildArmature(armatureName, dragonBonesName || "", skinName || "", textureAtlasName || "");
-            if (armature !== null) {
-                this._dragonBones.clock.add(armature);
-                return armature.display;
-            }
-            return null;
-        };
-        Object.defineProperty(PhaserFactory.prototype, "soundEventManager", {
-            /**
-             * - Create the display object with the specified texture.
-             * @param textureName The texture data name.
-             * @param textureAtlasName The texture atlas data name.  (Of not set, all texture atlas data will be searched)
-             * @version DragonBones 3.0
-             * @language en_US
-             */
-            /**
-             * - 创建带有指定贴图的显示对象。
-             * @param textureName 贴图数据名称。
-             * @param textureAtlasName 贴图集数据名称。 （如果未设置，将检索所有的贴图集数据）
-             * @version DragonBones 3.0
-             * @language zh_CN
-             */
-            // public getTextureDisplay(textureName: string, textureAtlasName: string | null = null): Phaser.Sprite | null {
-            //     const textureData = this._getTextureData(textureAtlasName !== null ? textureAtlasName : "", textureName) as PhaserTextureData;
-            //     if (textureData !== null && textureData.renderTexture !== null) {
-            //         return new Phaser.GameObjects.Sprite(PhaserFactory._game, 0.0, 0.0);
-            //     }
-            //     return null;
-            // }
-            /**
-             * - A global sound event manager.
-             * Sound events can be listened to uniformly from the manager.
-             * @version DragonBones 4.5
-             * @language en_US
-             */
-            /**
-             * - 全局声音事件管理器。
-             * 声音事件可以从该管理器统一侦听。
-             * @version DragonBones 4.5
-             * @language zh_CN
-             */
-            get: function () {
-                return this._dragonBones.eventManager;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        PhaserFactory._game = null;
-        PhaserFactory._scene = null;
-        PhaserFactory._dragonBonesInstance = null;
-        PhaserFactory._factory = null;
-        return PhaserFactory;
-    }(dragonBones.BaseFactory));
-    dragonBones.PhaserFactory = PhaserFactory;
-})(dragonBones || (dragonBones = {}));
-var dragonBones;
-(function (dragonBones) {
-    var DragonBonesPlugin = /** @class */ (function (_super) {
-        __extends(DragonBonesPlugin, _super);
-        function DragonBonesPlugin() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        DragonBonesPlugin.prototype.boot = function () {
-            dragonBones.PhaserFactory.init(this.game, this.scene);
-        };
-        return DragonBonesPlugin;
-    }(Phaser.Plugins.ScenePlugin));
-    dragonBones.DragonBonesPlugin = DragonBonesPlugin;
 })(dragonBones || (dragonBones = {}));

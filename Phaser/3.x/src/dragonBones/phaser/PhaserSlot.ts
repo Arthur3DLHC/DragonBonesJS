@@ -190,17 +190,28 @@ namespace dragonBones {
                         const scale = this._armature._armatureData.scale;
 
                         const meshDisplay = this._renderDisplay as Phaser.GameObjects.Mesh;
-                        meshDisplay.vertices = new Float32Array(vertexCount * 2);
-                        meshDisplay.uv = new Float32Array(vertexCount * 2);
-                        meshDisplay.indices = new Uint16Array(triangleCount * 2); // Phaser3 do not have indices.
+                        meshDisplay.vertices = new Float32Array(triangleCount * 3 * 2);
+                        meshDisplay.uv = new Float32Array(triangleCount * 3 * 2);
+                        // meshDisplay.vertices = new Float32Array(vertexCount * 2);
+                        // meshDisplay.uv = new Float32Array(vertexCount * 2);
+                        // meshDisplay.indices = new Uint16Array(triangleCount * 2); // Phaser3 do not have indices.
 
+                        /*
                         for (let i = 0, l = vertexCount * 2; i < l; ++i) {
                             meshDisplay.vertices[i] = floatArray[vertexOffset + i] * scale;
                             meshDisplay.uv[i] = floatArray[uvOffset + i];
                         }
+                        */
 
                         for (let i = 0; i < triangleCount * 3; ++i) {
-                            meshDisplay.indices[i] = intArray[this._geometryData.offset + BinaryOffset.GeometryVertexIndices + i];
+                            // the idx is vertex idx, not float numbers idx
+                            var idx = intArray[this._geometryData.offset + BinaryOffset.GeometryVertexIndices + i];
+                            meshDisplay.vertices[i * 2] = floatArray[vertexOffset + idx * 2] * scale;       // x
+                            meshDisplay.vertices[i * 2 + 1] = floatArray[vertexOffset + idx * 2 + 1] * scale;   // y
+                            meshDisplay.uv[i * 2] = floatArray[uvOffset + idx * 2];             // u
+                            meshDisplay.uv[i * 2 + 1] = floatArray[uvOffset + idx * 2 + 1];     // v
+
+                            // meshDisplay.indices[i] = intArray[this._geometryData.offset + BinaryOffset.GeometryVertexIndices + i];
                         }
 
                         meshDisplay.setTexture(currentTextureAtlasData.name, currentTextureData.name);

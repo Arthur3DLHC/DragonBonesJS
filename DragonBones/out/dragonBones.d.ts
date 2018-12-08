@@ -1612,6 +1612,42 @@ declare namespace dragonBones {
     /**
      * @private
      */
+    abstract class ConstraintData extends BaseObject {
+        order: number;
+        name: string;
+        type: ConstraintType;
+        target: BoneData;
+        root: BoneData;
+        bone: BoneData | null;
+        protected _onClear(): void;
+    }
+}
+/**
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2012-2018 DragonBones team and other contributors
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of
+ * this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to
+ * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ * the Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+declare namespace dragonBones {
+    /**
+     * @private
+     */
     class CanvasData extends BaseObject {
         static toString(): string;
         hasBackground: boolean;
@@ -1686,42 +1722,6 @@ declare namespace dragonBones {
          * @private
          */
         getDisplays(slotName: string): Array<DisplayData | null> | null;
-    }
-}
-/**
- * The MIT License (MIT)
- *
- * Copyright (c) 2012-2018 DragonBones team and other contributors
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of
- * this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
- * the Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
- * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
- * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-declare namespace dragonBones {
-    /**
-     * @private
-     */
-    abstract class ConstraintData extends BaseObject {
-        order: number;
-        name: string;
-        type: ConstraintType;
-        target: BoneData;
-        root: BoneData;
-        bone: BoneData | null;
-        protected _onClear(): void;
     }
 }
 /**
@@ -6237,292 +6237,5 @@ declare namespace dragonBones {
         data: DragonBonesData;
         armature: ArmatureData;
         skin: SkinData | null;
-    }
-}
-/**
- * The MIT License (MIT)
- *
- * Copyright (c) 2012-2018 DragonBones team and other contributors
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of
- * this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
- * the Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
- * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
- * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-declare namespace dragonBones {
-    /**
-     * - The Phaser texture atlas data.
-     * @version DragonBones 3.0
-     * @language en_US
-     */
-    /**
-     * - Phaser 贴图集数据。
-     * @version DragonBones 3.0
-     * @language zh_CN
-     */
-    class PhaserTextureAtlasData extends TextureAtlasData {
-        static toString(): string;
-        private _renderTexture;
-        protected _onClear(): void;
-        /**
-         * @inheritDoc
-         */
-        createTexture(): TextureData;
-        /**
-         * - The Phaser texture.
-         * @version DragonBones 3.0
-         * @language en_US
-         */
-        /**
-         * - Phaser 贴图。
-         * @version DragonBones 3.0
-         * @language zh_CN
-         */
-        renderTexture: Phaser.Textures.Texture | null;
-    }
-}
-/**
- * The MIT License (MIT)
- *
- * Copyright (c) 2012-2018 DragonBones team and other contributors
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of
- * this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
- * the Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
- * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
- * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-declare namespace dragonBones {
-    /**
-     * @inheritDoc
-     */
-    class PhaserArmatureDisplay extends Phaser.GameObjects.Container implements IArmatureProxy {
-        /**
-         * @private
-         */
-        debugDraw: boolean;
-        private _debugDraw;
-        private _armature;
-        private readonly _eventDispatcher;
-        /**
-         * @inheritDoc
-         */
-        dbInit(armature: Armature): void;
-        /**
-         * @inheritDoc
-         */
-        dbClear(): void;
-        /**
-         * @inheritDoc
-         */
-        dbUpdate(): void;
-        dispose(_disposeProxy?: boolean): void;
-        destroy(): void;
-        /**
-         * @private
-         */
-        dispatchDBEvent(type: EventStringType, eventObject: EventObject): void;
-        hasDBEventListener(type: EventStringType): boolean;
-        addDBEventListener(type: EventStringType, listener: (event: EventObject) => void, target: any): void;
-        removeDBEventListener(type: EventStringType, listener: (event: EventObject) => void, target: any): void;
-        readonly armature: Armature;
-        readonly animation: Animation;
-    }
-}
-/**
- * The MIT License (MIT)
- *
- * Copyright (c) 2012-2018 DragonBones team and other contributors
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of
- * this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
- * the Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
- * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
- * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-declare namespace dragonBones {
-    /**
-     * - The Phaser slot.
-     * @version DragonBones 5.6
-     * @language en_US
-     */
-    /**
-     * - Phaser 插槽。
-     * @version DragonBones 5.6
-     * @language zh_CN
-     */
-    class PhaserSlot extends Slot {
-        static toString(): string;
-        private _textureScale;
-        private _renderDisplay;
-        protected _onClear(): void;
-        protected _initDisplay(_value: any, _isRetain: boolean): void;
-        protected _disposeDisplay(value: any, isRelease: boolean): void;
-        protected _onUpdateDisplay(): void;
-        protected _addDisplay(): void;
-        protected _replaceDisplay(value: any): void;
-        protected _removeDisplay(): void;
-        protected _updateZOrder(): void;
-        protected _updateBlendMode(): void;
-        protected _updateColor(): void;
-        protected _updateFrame(): void;
-        protected _updateMesh(): void;
-        protected _updateTransform(): void;
-        protected _identityTransform(): void;
-    }
-}
-/**
- * The MIT License (MIT)
- *
- * Copyright (c) 2012-2018 DragonBones team and other contributors
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of
- * this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
- * the Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
- * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
- * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-declare namespace dragonBones {
-    /**
-     * - The Phaser factory.
-     * @version DragonBones 3.0
-     * @language en_US
-     */
-    /**
-     * - Phaser 工厂。
-     * @version DragonBones 3.0
-     * @language zh_CN
-     */
-    class PhaserFactory extends BaseFactory {
-        private static _game;
-        private static _scene;
-        private static _dragonBonesInstance;
-        private static _factory;
-        static init(game: Phaser.Game, scene: Phaser.Scene): void;
-        /**
-         * - A global factory instance that can be used directly.
-         * @version DragonBones 4.7
-         * @language en_US
-         */
-        /**
-         * - 一个可以直接使用的全局工厂实例。
-         * @version DragonBones 4.7
-         * @language zh_CN
-         */
-        static readonly factory: PhaserFactory;
-        /**
-         * @inheritDoc
-         */
-        constructor(dataParser?: DataParser | null);
-        protected _isSupportMesh(): boolean;
-        protected _buildTextureAtlasData(textureAtlasData: PhaserTextureAtlasData | null, textureAtlas: Phaser.Textures.Texture): PhaserTextureAtlasData;
-        protected _buildArmature(dataPackage: BuildArmaturePackage): Armature;
-        protected _buildSlot(dataPackage: BuildArmaturePackage, slotData: SlotData, armature: Armature): Slot;
-        /**
-         * - Create a armature from cached DragonBonesData instances and TextureAtlasData instances, then use the {@link #clock} to update it.
-         * The difference is that the armature created by {@link #buildArmature} is not WorldClock instance update.
-         * @param armatureName - The armature data name.
-         * @param dragonBonesName - The cached name of the DragonBonesData instance. (If not set, all DragonBonesData instances are retrieved, and when multiple DragonBonesData instances contain a the same name armature data, it may not be possible to accurately create a specific armature)
-         * @param skinName - The skin name, you can set a different ArmatureData name to share it's skin data. (If not set, use the default skin data)
-         * @returns The armature display container.
-         * @version DragonBones 4.5
-         * @example
-         * <pre>
-         *     let armatureDisplay = factory.buildArmatureDisplay("armatureName", "dragonBonesName");
-         * </pre>
-         * @language en_US
-         */
-        /**
-         * - 通过缓存的 DragonBonesData 实例和 TextureAtlasData 实例创建一个骨架，并用 {@link #clock} 更新该骨架。
-         * 区别在于由 {@link #buildArmature} 创建的骨架没有 WorldClock 实例驱动。
-         * @param armatureName - 骨架数据名称。
-         * @param dragonBonesName - DragonBonesData 实例的缓存名称。 （如果未设置，将检索所有的 DragonBonesData 实例，当多个 DragonBonesData 实例中包含同名的骨架数据时，可能无法准确的创建出特定的骨架）
-         * @param skinName - 皮肤名称，可以设置一个其他骨架数据名称来共享其皮肤数据。 （如果未设置，则使用默认的皮肤数据）
-         * @returns 骨架的显示容器。
-         * @version DragonBones 4.5
-         * @example
-         * <pre>
-         *     let armatureDisplay = factory.buildArmatureDisplay("armatureName", "dragonBonesName");
-         * </pre>
-         * @language zh_CN
-         */
-        buildArmatureDisplay(armatureName: string, dragonBonesName?: string, skinName?: string, textureAtlasName?: string): PhaserArmatureDisplay | null;
-        /**
-         * - Create the display object with the specified texture.
-         * @param textureName The texture data name.
-         * @param textureAtlasName The texture atlas data name.  (Of not set, all texture atlas data will be searched)
-         * @version DragonBones 3.0
-         * @language en_US
-         */
-        /**
-         * - 创建带有指定贴图的显示对象。
-         * @param textureName 贴图数据名称。
-         * @param textureAtlasName 贴图集数据名称。 （如果未设置，将检索所有的贴图集数据）
-         * @version DragonBones 3.0
-         * @language zh_CN
-         */
-        /**
-         * - A global sound event manager.
-         * Sound events can be listened to uniformly from the manager.
-         * @version DragonBones 4.5
-         * @language en_US
-         */
-        /**
-         * - 全局声音事件管理器。
-         * 声音事件可以从该管理器统一侦听。
-         * @version DragonBones 4.5
-         * @language zh_CN
-         */
-        readonly soundEventManager: PhaserArmatureDisplay;
-    }
-}
-declare namespace dragonBones {
-    class DragonBonesPlugin extends Phaser.Plugins.ScenePlugin {
-        boot(): void;
     }
 }

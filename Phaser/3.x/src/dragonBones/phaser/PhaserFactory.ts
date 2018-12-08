@@ -76,8 +76,8 @@ namespace dragonBones {
         }
 
         protected _isSupportMesh(): boolean {
-            console.warn("Phaser can not support mesh.");
-
+            //console.warn("Phaser can not support mesh.");
+            console.log("Customize mesh support for phaser!!")
             return false;
         }
 

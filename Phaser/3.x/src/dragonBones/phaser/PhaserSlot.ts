@@ -46,6 +46,10 @@ namespace dragonBones {
             Phaser.GameObjects.Components.Texture &
             Phaser.GameObjects.Components.Transform;
 
+        // Hold a temporary vertex array for vertices after skin-weight blended.
+        // Then add them to the mesh vertices array, indexed by indices array.
+        private _skinnedVertices:Float32Array;
+
         protected _onClear(): void {
             super._onClear();
 
@@ -220,6 +224,9 @@ namespace dragonBones {
                         const isSurface = this._parent._boneData.type !== BoneType.Bone;
                         if (isSkinned || isSurface) {
                             this._identityTransform();
+
+                            // alloc the temp skinned vertice array
+                            this._skinnedVertices = new Float32Array(vertexCount * 2);
                         }
                     }
                     else { // Normal texture.
@@ -248,11 +255,14 @@ namespace dragonBones {
             const hasDeform = deformVertices.length > 0 && geometryData.inheritDeform;
             const meshDisplay = this._renderDisplay as Phaser.GameObjects.Mesh;
 
+            const data = geometryData.data;
+            const intArray = data.intArray;
+            const floatArray = data.floatArray;
+            const vertexCount = intArray[geometryData.offset + BinaryOffset.GeometryVertexCount];
+            const triangleCount = intArray[geometryData.offset + BinaryOffset.GeometryTriangleCount];
+            let vertexOffset = intArray[geometryData.offset + BinaryOffset.GeometryFloatOffset];
+                
             if (weightData !== null) {
-                const data = geometryData.data;
-                const intArray = data.intArray;
-                const floatArray = data.floatArray;
-                const vertexCount = intArray[geometryData.offset + BinaryOffset.GeometryVertexCount];
                 let weightFloatOffset = intArray[weightData.offset + BinaryOffset.WeigthFloatOffset];
 
                 if (weightFloatOffset < 0) {
@@ -287,17 +297,14 @@ namespace dragonBones {
                         }
                     }
 
-                    meshDisplay.vertices[iD++] = xG;
-                    meshDisplay.vertices[iD++] = yG;
+                    //meshDisplay.vertices[iD++] = xG;
+                    //meshDisplay.vertices[iD++] = yG;
+                    this._skinnedVertices[iD++] = xG;
+                    this._skinnedVertices[iD++] = yG;
                 }
             }
             else {
                 const isSurface = this._parent._boneData.type !== BoneType.Bone;
-                const data = geometryData.data;
-                const intArray = data.intArray;
-                const floatArray = data.floatArray;
-                const vertexCount = intArray[geometryData.offset + BinaryOffset.GeometryVertexCount];
-                let vertexOffset = intArray[geometryData.offset + BinaryOffset.GeometryFloatOffset];
 
                 if (vertexOffset < 0) {
                     vertexOffset += 65536; // Fixed out of bounds bug. 
@@ -314,14 +321,27 @@ namespace dragonBones {
 
                     if (isSurface) {
                         const matrix = (this._parent as Surface)._getGlobalTransformMatrix(x, y);
-                        meshDisplay.vertices[i] = matrix.a * x + matrix.c * y + matrix.tx;
-                        meshDisplay.vertices[i + 1] = matrix.b * x + matrix.d * y + matrix.ty;
+                        this._skinnedVertices[i] = matrix.a * x + matrix.c * y + matrix.tx;
+                        this._skinnedVertices[i + 1] = matrix.b * x + matrix.d * y + matrix.ty;
+                        //meshDisplay.vertices[i] = matrix.a * x + matrix.c * y + matrix.tx;
+                        //meshDisplay.vertices[i + 1] = matrix.b * x + matrix.d * y + matrix.ty;
                     }
                     else {
-                        meshDisplay.vertices[i] = x;
-                        meshDisplay.vertices[i + 1] = y;
+                        this._skinnedVertices[i] = x;
+                        this._skinnedVertices[i + 1] = y;
+                        //meshDisplay.vertices[i] = x;
+                        //meshDisplay.vertices[i + 1] = y;
                     }
                 }
+            }
+
+            // Put the skinned vertices to mesh
+            for (let i = 0; i < triangleCount * 3; ++i) {
+                // the idx is vertex idx, not float numbers idx
+                var idx = intArray[geometryData.offset + BinaryOffset.GeometryVertexIndices + i];
+                // 注意：计算骨骼皮肤时已经乘过了 scale，这里就不要再乘了
+                meshDisplay.vertices[i * 2] = this._skinnedVertices[vertexOffset + idx * 2];    // x
+                meshDisplay.vertices[i * 2 + 1] = this._skinnedVertices[vertexOffset + idx * 2 + 1];       // y
             }
         }
 

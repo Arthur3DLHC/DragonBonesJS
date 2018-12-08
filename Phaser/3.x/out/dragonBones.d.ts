@@ -6389,6 +6389,7 @@ declare namespace dragonBones {
         static toString(): string;
         private _textureScale;
         private _renderDisplay;
+        private _skinnedVertices;
         protected _onClear(): void;
         protected _initDisplay(_value: any, _isRetain: boolean): void;
         protected _disposeDisplay(value: any, isRelease: boolean): void;

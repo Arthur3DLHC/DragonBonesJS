@@ -15566,6 +15566,8 @@ var dragonBones;
                         var isSurface = this._parent._boneData.type !== 0 /* Bone */;
                         if (isSkinned || isSurface) {
                             this._identityTransform();
+                            // alloc the temp skinned vertice array
+                            this._skinnedVertices = new Float32Array(vertexCount * 2);
                         }
                     }
                     else { // Normal texture.
@@ -15589,11 +15591,13 @@ var dragonBones;
             var weightData = geometryData.weight;
             var hasDeform = deformVertices.length > 0 && geometryData.inheritDeform;
             var meshDisplay = this._renderDisplay;
+            var data = geometryData.data;
+            var intArray = data.intArray;
+            var floatArray = data.floatArray;
+            var vertexCount = intArray[geometryData.offset + 0 /* GeometryVertexCount */];
+            var triangleCount = intArray[geometryData.offset + 1 /* GeometryTriangleCount */];
+            var vertexOffset = intArray[geometryData.offset + 2 /* GeometryFloatOffset */];
             if (weightData !== null) {
-                var data = geometryData.data;
-                var intArray = data.intArray;
-                var floatArray = data.floatArray;
-                var vertexCount = intArray[geometryData.offset + 0 /* GeometryVertexCount */];
                 var weightFloatOffset = intArray[weightData.offset + 1 /* WeigthFloatOffset */];
                 if (weightFloatOffset < 0) {
                     weightFloatOffset += 65536; // Fixed out of bounds bug. 
@@ -15617,17 +15621,14 @@ var dragonBones;
                             yG += (matrix.b * xL + matrix.d * yL + matrix.ty) * weight;
                         }
                     }
-                    meshDisplay.vertices[iD++] = xG;
-                    meshDisplay.vertices[iD++] = yG;
+                    //meshDisplay.vertices[iD++] = xG;
+                    //meshDisplay.vertices[iD++] = yG;
+                    this._skinnedVertices[iD++] = xG;
+                    this._skinnedVertices[iD++] = yG;
                 }
             }
             else {
                 var isSurface = this._parent._boneData.type !== 0 /* Bone */;
-                var data = geometryData.data;
-                var intArray = data.intArray;
-                var floatArray = data.floatArray;
-                var vertexCount = intArray[geometryData.offset + 0 /* GeometryVertexCount */];
-                var vertexOffset = intArray[geometryData.offset + 2 /* GeometryFloatOffset */];
                 if (vertexOffset < 0) {
                     vertexOffset += 65536; // Fixed out of bounds bug. 
                 }
@@ -15640,14 +15641,26 @@ var dragonBones;
                     }
                     if (isSurface) {
                         var matrix = this._parent._getGlobalTransformMatrix(x, y);
-                        meshDisplay.vertices[i] = matrix.a * x + matrix.c * y + matrix.tx;
-                        meshDisplay.vertices[i + 1] = matrix.b * x + matrix.d * y + matrix.ty;
+                        this._skinnedVertices[i] = matrix.a * x + matrix.c * y + matrix.tx;
+                        this._skinnedVertices[i + 1] = matrix.b * x + matrix.d * y + matrix.ty;
+                        //meshDisplay.vertices[i] = matrix.a * x + matrix.c * y + matrix.tx;
+                        //meshDisplay.vertices[i + 1] = matrix.b * x + matrix.d * y + matrix.ty;
                     }
                     else {
-                        meshDisplay.vertices[i] = x;
-                        meshDisplay.vertices[i + 1] = y;
+                        this._skinnedVertices[i] = x;
+                        this._skinnedVertices[i + 1] = y;
+                        //meshDisplay.vertices[i] = x;
+                        //meshDisplay.vertices[i + 1] = y;
                     }
                 }
+            }
+            // Put the skinned vertices to mesh
+            for (var i = 0; i < triangleCount * 3; ++i) {
+                // the idx is vertex idx, not float numbers idx
+                var idx = intArray[geometryData.offset + 4 /* GeometryVertexIndices */ + i];
+                // 注意：计算骨骼皮肤时已经乘过了 scale，这里就不要再乘了
+                meshDisplay.vertices[i * 2] = this._skinnedVertices[vertexOffset + idx * 2]; // x
+                meshDisplay.vertices[i * 2 + 1] = this._skinnedVertices[vertexOffset + idx * 2 + 1]; // y
             }
         };
         PhaserSlot.prototype._updateTransform = function () {

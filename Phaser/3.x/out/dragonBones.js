@@ -15241,7 +15241,9 @@ var dragonBones;
                     var index = 0;
                     for (var k in this.textures) {
                         var textureData = this.textures[k];
-                        textureData.renderTexture = this._renderTexture.add(k, index++, textureData.region.x, textureData.region.y, textureData.region.width, textureData.region.height);
+                        textureData.renderTexture = this._renderTexture.add(k, index, 
+                        // k, index++,
+                        textureData.region.x, textureData.region.y, textureData.region.width, textureData.region.height);
                     }
                 }
                 else {

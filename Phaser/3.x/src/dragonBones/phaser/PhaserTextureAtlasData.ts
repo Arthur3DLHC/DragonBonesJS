@@ -81,7 +81,8 @@ namespace dragonBones {
                 for (let k in this.textures) {
                     const textureData = this.textures[k] as PhaserTextureData;
                     textureData.renderTexture = this._renderTexture.add(
-                        k, index++,
+                        k, index,
+                        // k, index++,
                         textureData.region.x, textureData.region.y,
                         textureData.region.width, textureData.region.height
                     );

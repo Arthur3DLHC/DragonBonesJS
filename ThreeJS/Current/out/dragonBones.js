@@ -14127,7 +14127,7 @@ var dragonBones;
             var frameFloatArray = new Float32Array(this._binary, this._binaryOffset + offsets[6], l4 / Float32Array.BYTES_PER_ELEMENT);
             var frameArray = new Int16Array(this._binary, this._binaryOffset + offsets[8], l5 / Int16Array.BYTES_PER_ELEMENT);
             var timelineArray = new Uint16Array(this._binary, this._binaryOffset + offsets[10], l6 / Uint16Array.BYTES_PER_ELEMENT);
-            var colorArray = l7 > 0 ? new Int16Array(this._binary, this._binaryOffset + offsets[12], l7 / Int16Array.BYTES_PER_ELEMENT) : intArray; // Color.
+            var colorArray = l7 > 0 ? new Uint16Array(this._binary, this._binaryOffset + offsets[12], l7 / Uint16Array.BYTES_PER_ELEMENT) : intArray; // Color.
             this._data.binary = this._binary;
             this._data.intArray = this._intArrayBuffer = intArray;
             this._data.floatArray = floatArray;
@@ -15182,46 +15182,54 @@ var dragonBones;
 var dragonBones;
 (function (dragonBones) {
     /**
-     * - The PixiJS texture atlas data.
+     * - The ThreeJS texture atlas data.
      * @version DragonBones 3.0
      * @language en_US
      */
     /**
-     * - PixiJS 贴图集数据。
+     * - ThreeJS 贴图集数据。
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    var PixiTextureAtlasData = /** @class */ (function (_super) {
-        __extends(PixiTextureAtlasData, _super);
-        function PixiTextureAtlasData() {
+    var ThreeTextureAtlasData = /** @class */ (function (_super) {
+        __extends(ThreeTextureAtlasData, _super);
+        function ThreeTextureAtlasData() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
+            /**
+             * @private
+             */
+            _this.material = null; // Initial value.
             _this._renderTexture = null; // Initial value.
             return _this;
         }
-        PixiTextureAtlasData.toString = function () {
-            return "[class dragonBones.PixiTextureAtlasData]";
+        ThreeTextureAtlasData.toString = function () {
+            return "[class dragonBones.ThreeTextureAtlasData]";
         };
-        PixiTextureAtlasData.prototype._onClear = function () {
+        ThreeTextureAtlasData.prototype._onClear = function () {
             _super.prototype._onClear.call(this);
+            if (this.material !== null) {
+                this.material.dispose();
+            }
             if (this._renderTexture !== null) {
                 // this._renderTexture.dispose();
             }
+            this.material = null;
             this._renderTexture = null;
         };
         /**
          * @inheritDoc
          */
-        PixiTextureAtlasData.prototype.createTexture = function () {
-            return dragonBones.BaseObject.borrowObject(PixiTextureData);
+        ThreeTextureAtlasData.prototype.createTexture = function () {
+            return dragonBones.BaseObject.borrowObject(ThreeTextureData);
         };
-        Object.defineProperty(PixiTextureAtlasData.prototype, "renderTexture", {
+        Object.defineProperty(ThreeTextureAtlasData.prototype, "renderTexture", {
             /**
-             * - The PixiJS texture.
+             * - The ThreeJS texture.
              * @version DragonBones 3.0
              * @language en_US
              */
             /**
-             * - PixiJS 贴图。
+             * - ThreeJS 贴图。
              * @version DragonBones 3.0
              * @language zh_CN
              */
@@ -15233,49 +15241,27 @@ var dragonBones;
                     return;
                 }
                 this._renderTexture = value;
-                if (this._renderTexture !== null) {
-                    for (var k in this.textures) {
-                        var textureData = this.textures[k];
-                        textureData.renderTexture = new PIXI.Texture(this._renderTexture, new PIXI.Rectangle(textureData.region.x, textureData.region.y, textureData.region.width, textureData.region.height), new PIXI.Rectangle(textureData.region.x, textureData.region.y, textureData.region.width, textureData.region.height), new PIXI.Rectangle(0, 0, textureData.region.width, textureData.region.height), textureData.rotated // .d.ts bug
-                        );
-                    }
-                }
-                else {
-                    for (var k in this.textures) {
-                        var textureData = this.textures[k];
-                        textureData.renderTexture = null;
-                    }
-                }
             },
             enumerable: true,
             configurable: true
         });
-        return PixiTextureAtlasData;
+        return ThreeTextureAtlasData;
     }(dragonBones.TextureAtlasData));
-    dragonBones.PixiTextureAtlasData = PixiTextureAtlasData;
+    dragonBones.ThreeTextureAtlasData = ThreeTextureAtlasData;
     /**
      * @internal
      */
-    var PixiTextureData = /** @class */ (function (_super) {
-        __extends(PixiTextureData, _super);
-        function PixiTextureData() {
-            var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.renderTexture = null; // Initial value.
-            return _this;
+    var ThreeTextureData = /** @class */ (function (_super) {
+        __extends(ThreeTextureData, _super);
+        function ThreeTextureData() {
+            return _super !== null && _super.apply(this, arguments) || this;
         }
-        PixiTextureData.toString = function () {
-            return "[class dragonBones.PixiTextureData]";
+        ThreeTextureData.toString = function () {
+            return "[class dragonBones.ThreeTextureData]";
         };
-        PixiTextureData.prototype._onClear = function () {
-            _super.prototype._onClear.call(this);
-            if (this.renderTexture !== null) {
-                this.renderTexture.destroy(false);
-            }
-            this.renderTexture = null;
-        };
-        return PixiTextureData;
+        return ThreeTextureData;
     }(dragonBones.TextureData));
-    dragonBones.PixiTextureData = PixiTextureData;
+    dragonBones.ThreeTextureData = ThreeTextureData;
 })(dragonBones || (dragonBones = {}));
 /**
  * The MIT License (MIT)
@@ -15304,9 +15290,9 @@ var dragonBones;
     /**
      * @inheritDoc
      */
-    var PixiArmatureDisplay = /** @class */ (function (_super) {
-        __extends(PixiArmatureDisplay, _super);
-        function PixiArmatureDisplay() {
+    var ThreeArmatureDisplay = /** @class */ (function (_super) {
+        __extends(ThreeArmatureDisplay, _super);
+        function ThreeArmatureDisplay() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
             /**
              * @private
@@ -15321,112 +15307,40 @@ var dragonBones;
         /**
          * @inheritDoc
          */
-        PixiArmatureDisplay.prototype.dbInit = function (armature) {
+        ThreeArmatureDisplay.prototype.dbInit = function (armature) {
             this._armature = armature;
         };
         /**
          * @inheritDoc
          */
-        PixiArmatureDisplay.prototype.dbClear = function () {
+        ThreeArmatureDisplay.prototype.dbClear = function () {
             if (this._debugDrawer !== null) {
-                this._debugDrawer.destroy(true);
             }
             this._armature = null;
             this._debugDrawer = null;
-            _super.prototype.destroy.call(this);
         };
         /**
          * @inheritDoc
          */
-        PixiArmatureDisplay.prototype.dbUpdate = function () {
+        ThreeArmatureDisplay.prototype.dbUpdate = function () {
             var drawed = dragonBones.DragonBones.debugDraw || this.debugDraw;
             if (drawed || this._debugDraw) {
                 this._debugDraw = drawed;
                 if (this._debugDraw) {
                     if (this._debugDrawer === null) {
-                        this._debugDrawer = new PIXI.Sprite();
-                        var boneDrawer_1 = new PIXI.Graphics();
-                        this._debugDrawer.addChild(boneDrawer_1);
+                        this._debugDrawer = new THREE.Group();
                     }
-                    this.addChild(this._debugDrawer);
-                    var boneDrawer = this._debugDrawer.getChildAt(0);
-                    boneDrawer.clear();
-                    var bones = this._armature.getBones();
-                    for (var i = 0, l = bones.length; i < l; ++i) {
-                        var bone = bones[i];
-                        var boneLength = bone.boneData.length;
-                        var startX = bone.globalTransformMatrix.tx;
-                        var startY = bone.globalTransformMatrix.ty;
-                        var endX = startX + bone.globalTransformMatrix.a * boneLength;
-                        var endY = startY + bone.globalTransformMatrix.b * boneLength;
-                        boneDrawer.lineStyle(2.0, 0x00FFFF, 0.7);
-                        boneDrawer.moveTo(startX, startY);
-                        boneDrawer.lineTo(endX, endY);
-                        boneDrawer.lineStyle(0.0, 0, 0.0);
-                        boneDrawer.beginFill(0x00FFFF, 0.7);
-                        boneDrawer.drawCircle(startX, startY, 3.0);
-                        boneDrawer.endFill();
-                    }
-                    var slots = this._armature.getSlots();
-                    for (var i = 0, l = slots.length; i < l; ++i) {
-                        var slot = slots[i];
-                        var boundingBoxData = slot.boundingBoxData;
-                        if (boundingBoxData) {
-                            var child = this._debugDrawer.getChildByName(slot.name);
-                            if (!child) {
-                                child = new PIXI.Graphics();
-                                child.name = slot.name;
-                                this._debugDrawer.addChild(child);
-                            }
-                            child.clear();
-                            child.lineStyle(2.0, 0xFF00FF, 0.7);
-                            switch (boundingBoxData.type) {
-                                case 0 /* Rectangle */:
-                                    child.drawRect(-boundingBoxData.width * 0.5, -boundingBoxData.height * 0.5, boundingBoxData.width, boundingBoxData.height);
-                                    break;
-                                case 1 /* Ellipse */:
-                                    child.drawEllipse(-boundingBoxData.width * 0.5, -boundingBoxData.height * 0.5, boundingBoxData.width, boundingBoxData.height);
-                                    break;
-                                case 2 /* Polygon */:
-                                    var vertices = boundingBoxData.vertices;
-                                    for (var i_4 = 0, l_1 = vertices.length; i_4 < l_1; i_4 += 2) {
-                                        var x = vertices[i_4];
-                                        var y = vertices[i_4 + 1];
-                                        if (i_4 === 0) {
-                                            child.moveTo(x, y);
-                                        }
-                                        else {
-                                            child.lineTo(x, y);
-                                        }
-                                    }
-                                    child.lineTo(vertices[0], vertices[1]);
-                                    break;
-                                default:
-                                    break;
-                            }
-                            child.endFill();
-                            slot.updateTransformAndMatrix();
-                            slot.updateGlobalTransform();
-                            var transform = slot.global;
-                            child.setTransform(transform.x, transform.y, transform.scaleX, transform.scaleY, transform.rotation, transform.skew, 0.0, slot._pivotX, slot._pivotY);
-                        }
-                        else {
-                            var child = this._debugDrawer.getChildByName(slot.name);
-                            if (child) {
-                                this._debugDrawer.removeChild(child);
-                            }
-                        }
-                    }
+                    this.add(this._debugDrawer);
                 }
                 else if (this._debugDrawer !== null && this._debugDrawer.parent === this) {
-                    this.removeChild(this._debugDrawer);
+                    this.remove(this._debugDrawer);
                 }
             }
         };
         /**
          * @inheritDoc
          */
-        PixiArmatureDisplay.prototype.dispose = function (disposeProxy) {
+        ThreeArmatureDisplay.prototype.dispose = function (disposeProxy) {
             if (disposeProxy === void 0) { disposeProxy = true; }
             // tslint:disable-next-line:no-unused-expression
             disposeProxy;
@@ -15436,36 +15350,36 @@ var dragonBones;
             }
         };
         /**
-         * @inheritDoc
-         */
-        PixiArmatureDisplay.prototype.destroy = function () {
-            this.dispose();
-        };
-        /**
          * @private
          */
-        PixiArmatureDisplay.prototype.dispatchDBEvent = function (type, eventObject) {
-            this.emit(type, eventObject);
+        ThreeArmatureDisplay.prototype.dispatchDBEvent = function (type, eventObject) {
+            // tslint:disable-next-line:no-unused-expression
+            type;
+            this.dispatchEvent(eventObject);
         };
         /**
          * @inheritDoc
          */
-        PixiArmatureDisplay.prototype.hasDBEventListener = function (type) {
-            return this.listeners(type, true); // .d.ts bug
+        ThreeArmatureDisplay.prototype.hasDBEventListener = function (type) {
+            var listeners = this._listeners; //
+            return listeners !== undefined && type in listeners;
         };
         /**
          * @inheritDoc
          */
-        PixiArmatureDisplay.prototype.addDBEventListener = function (type, listener, target) {
-            this.addListener(type, listener, target);
+        ThreeArmatureDisplay.prototype.addDBEventListener = function (type, listener, target) {
+            listener.bind(target);
+            this.addEventListener(type, listener);
         };
         /**
          * @inheritDoc
          */
-        PixiArmatureDisplay.prototype.removeDBEventListener = function (type, listener, target) {
-            this.removeListener(type, listener, target);
+        ThreeArmatureDisplay.prototype.removeDBEventListener = function (type, listener, target) {
+            // tslint:disable-next-line:no-unused-expression
+            target;
+            this.removeEventListener(type, listener);
         };
-        Object.defineProperty(PixiArmatureDisplay.prototype, "armature", {
+        Object.defineProperty(ThreeArmatureDisplay.prototype, "armature", {
             /**
              * @inheritDoc
              */
@@ -15475,7 +15389,7 @@ var dragonBones;
             enumerable: true,
             configurable: true
         });
-        Object.defineProperty(PixiArmatureDisplay.prototype, "animation", {
+        Object.defineProperty(ThreeArmatureDisplay.prototype, "animation", {
             /**
              * @inheritDoc
              */
@@ -15485,9 +15399,27 @@ var dragonBones;
             enumerable: true,
             configurable: true
         });
-        return PixiArmatureDisplay;
-    }(PIXI.Sprite));
-    dragonBones.PixiArmatureDisplay = PixiArmatureDisplay;
+        /**
+         * @inheritDoc
+         */
+        ThreeArmatureDisplay.prototype.hasEvent = function (type) {
+            return this.hasDBEventListener(type);
+        };
+        /**
+         * @inheritDoc
+         */
+        ThreeArmatureDisplay.prototype.addEvent = function (type, listener, target) {
+            this.addDBEventListener(type, listener, target);
+        };
+        /**
+         * @inheritDoc
+         */
+        ThreeArmatureDisplay.prototype.removeEvent = function (type, listener, target) {
+            this.removeDBEventListener(type, listener, target);
+        };
+        return ThreeArmatureDisplay;
+    }(THREE.Group));
+    dragonBones.ThreeArmatureDisplay = ThreeArmatureDisplay;
 })(dragonBones || (dragonBones = {}));
 /**
  * The MIT License (MIT)
@@ -15514,137 +15446,190 @@ var dragonBones;
 var dragonBones;
 (function (dragonBones) {
     /**
-     * - The PixiJS slot.
+     * - The ThreeJS slot.
      * @version DragonBones 3.0
      * @language en_US
      */
     /**
-     * - PixiJS 插槽。
+     * - ThreeJS 插槽。
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    var PixiSlot = /** @class */ (function (_super) {
-        __extends(PixiSlot, _super);
-        function PixiSlot() {
-            return _super !== null && _super.apply(this, arguments) || this;
+    var ThreeSlot = /** @class */ (function (_super) {
+        __extends(ThreeSlot, _super);
+        function ThreeSlot() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this._material = null; // Initial value.
+            return _this;
         }
-        PixiSlot.toString = function () {
-            return "[class dragonBones.PixiSlot]";
+        ThreeSlot.toString = function () {
+            return "[class dragonBones.ThreeSlot]";
         };
-        PixiSlot.prototype._onClear = function () {
+        ThreeSlot.prototype._onClear = function () {
             _super.prototype._onClear.call(this);
-            this._textureScale = 1.0;
+            if (this._material !== null) {
+                this._material.dispose();
+            }
             this._renderDisplay = null;
-            this._updateTransform = PIXI.VERSION[0] === "3" ? this._updateTransformV3 : this._updateTransformV4;
+            this._material = null;
         };
-        PixiSlot.prototype._initDisplay = function (value, isRetain) {
+        ThreeSlot.prototype._clearGeometry = function (geometry) {
+            var vertices = geometry.vertices;
+            var faces = geometry.faces;
+            var faceVertexUVs = geometry.faceVertexUvs[0];
+            for (var _i = 0, vertices_1 = vertices; _i < vertices_1.length; _i++) {
+                var vertex = vertices_1[_i];
+                dragonBones.ThreeFactory.release(vertex, dragonBones.ThreeFactory.POOL_TYPE_VECTOR3);
+            }
+            for (var _a = 0, faces_1 = faces; _a < faces_1.length; _a++) {
+                var face = faces_1[_a];
+                dragonBones.ThreeFactory.release(face, dragonBones.ThreeFactory.POOL_TYPE_FACE3);
+            }
+            for (var _b = 0, faceVertexUVs_1 = faceVertexUVs; _b < faceVertexUVs_1.length; _b++) {
+                var faceUVS = faceVertexUVs_1[_b];
+                for (var _c = 0, faceUVS_1 = faceUVS; _c < faceUVS_1.length; _c++) {
+                    var uv = faceUVS_1[_c];
+                    dragonBones.ThreeFactory.release(uv, dragonBones.ThreeFactory.POOL_TYPE_VECTOR2);
+                }
+            }
+            vertices.length = 0;
+            faces.length = 0;
+            faceVertexUVs.length = 0;
+        };
+        ThreeSlot.prototype._initDisplay = function (value, isRetain) {
             // tslint:disable-next-line:no-unused-expression
             value;
             // tslint:disable-next-line:no-unused-expression
             isRetain;
         };
-        PixiSlot.prototype._disposeDisplay = function (value, isRelease) {
+        ThreeSlot.prototype._disposeDisplay = function (value, isRelease) {
             // tslint:disable-next-line:no-unused-expression
             value;
             if (!isRelease) {
-                value.destroy();
+                value.geometry.dispose(); //
             }
         };
-        PixiSlot.prototype._onUpdateDisplay = function () {
+        ThreeSlot.prototype._onUpdateDisplay = function () {
             this._renderDisplay = (this._display ? this._display : this._rawDisplay);
+            this._renderDisplay.matrixAutoUpdate = false;
         };
-        PixiSlot.prototype._addDisplay = function () {
+        ThreeSlot.prototype._addDisplay = function () {
             var container = this._armature.display;
-            container.addChild(this._renderDisplay);
+            container.add(this._renderDisplay);
         };
-        PixiSlot.prototype._replaceDisplay = function (value) {
+        ThreeSlot.prototype._replaceDisplay = function (value) {
             var container = this._armature.display;
             var prevDisplay = value;
-            container.addChild(this._renderDisplay);
-            container.swapChildren(this._renderDisplay, prevDisplay);
-            container.removeChild(prevDisplay);
-            this._textureScale = 1.0;
+            container.add(this._renderDisplay);
+            container.remove(prevDisplay);
         };
-        PixiSlot.prototype._removeDisplay = function () {
-            this._renderDisplay.parent.removeChild(this._renderDisplay);
+        ThreeSlot.prototype._removeDisplay = function () {
+            this._renderDisplay.parent.remove(this._renderDisplay);
         };
-        PixiSlot.prototype._updateZOrder = function () {
-            var container = this._armature.display;
-            var index = container.getChildIndex(this._renderDisplay);
-            if (index === this._zOrder) {
-                return;
-            }
-            container.addChildAt(this._renderDisplay, this._zOrder);
+        ThreeSlot.prototype._updateZOrder = function () {
+            this._renderDisplay.position.setZ(this._zOrder);
         };
         /**
          * @internal
          */
-        PixiSlot.prototype._updateVisible = function () {
+        ThreeSlot.prototype._updateVisible = function () {
             this._renderDisplay.visible = this._parent.visible && this._visible;
         };
-        PixiSlot.prototype._updateBlendMode = function () {
-            if (this._renderDisplay instanceof PIXI.Sprite) {
-                switch (this._blendMode) {
-                    case 0 /* Normal */:
-                        this._renderDisplay.blendMode = PIXI.BLEND_MODES.NORMAL;
-                        break;
-                    case 1 /* Add */:
-                        this._renderDisplay.blendMode = PIXI.BLEND_MODES.ADD;
-                        break;
-                    case 3 /* Darken */:
-                        this._renderDisplay.blendMode = PIXI.BLEND_MODES.DARKEN;
-                        break;
-                    case 4 /* Difference */:
-                        this._renderDisplay.blendMode = PIXI.BLEND_MODES.DIFFERENCE;
-                        break;
-                    case 6 /* HardLight */:
-                        this._renderDisplay.blendMode = PIXI.BLEND_MODES.HARD_LIGHT;
-                        break;
-                    case 9 /* Lighten */:
-                        this._renderDisplay.blendMode = PIXI.BLEND_MODES.LIGHTEN;
-                        break;
-                    case 10 /* Multiply */:
-                        this._renderDisplay.blendMode = PIXI.BLEND_MODES.MULTIPLY;
-                        break;
-                    case 11 /* Overlay */:
-                        this._renderDisplay.blendMode = PIXI.BLEND_MODES.OVERLAY;
-                        break;
-                    case 12 /* Screen */:
-                        this._renderDisplay.blendMode = PIXI.BLEND_MODES.SCREEN;
-                        break;
-                    default:
-                        break;
+        ThreeSlot.prototype._updateBlendMode = function () {
+            // switch (this._blendMode) {
+            //     case BlendMode.Normal:
+            //         break;
+            //     case BlendMode.Add:
+            //         break;
+            //     case BlendMode.Darken:
+            //         break;
+            //     case BlendMode.Difference:
+            //         break;
+            //     case BlendMode.HardLight:
+            //         break;
+            //     case BlendMode.Lighten:
+            //         break;
+            //     case BlendMode.Multiply:
+            //         break;
+            //     case BlendMode.Overlay:
+            //         break;
+            //     case BlendMode.Screen:
+            //         break;
+            //     default:
+            //         break;
+            // }
+            if (this._renderDisplay === this._rawDisplay) {
+                var textureData = this._textureData;
+                if (textureData === null) {
+                    return;
+                }
+                var textureAtlasData = textureData.parent;
+                if (textureAtlasData.renderTexture === null) {
+                    return;
+                }
+                var meshDisplay = this._renderDisplay;
+                if (this._blendMode !== 0 /* Normal */) {
+                    if (this._material === null) {
+                        this._material = new THREE.MeshBasicMaterial();
+                        this._material.copy(textureAtlasData.material);
+                    }
+                    this._material.blending = THREE.AdditiveBlending;
+                    meshDisplay.material = this._material;
+                }
+                else {
+                    meshDisplay.material = textureAtlasData.material;
                 }
             }
             // TODO child armature.
         };
-        PixiSlot.prototype._updateColor = function () {
-            var alpha = this._colorTransform.alphaMultiplier * this._globalAlpha;
-            this._renderDisplay.alpha = alpha;
-            if (this._renderDisplay instanceof PIXI.Sprite || this._renderDisplay instanceof PIXI.mesh.Mesh) {
-                var color = (Math.round(this._colorTransform.redMultiplier * 0xFF) << 16) + (Math.round(this._colorTransform.greenMultiplier * 0xFF) << 8) + Math.round(this._colorTransform.blueMultiplier * 0xFF);
-                this._renderDisplay.tint = color;
+        ThreeSlot.prototype._updateColor = function () {
+            if (this._renderDisplay === this._rawDisplay) {
+                var textureData = this._textureData;
+                if (textureData === null) {
+                    return;
+                }
+                var textureAtlasData = textureData.parent;
+                if (textureAtlasData.renderTexture === null) {
+                    return;
+                }
+                var alpha = this._colorTransform.alphaMultiplier * this._globalAlpha;
+                var meshDisplay = this._renderDisplay;
+                if (alpha !== 1.0 ||
+                    this._colorTransform.redMultiplier !== 1.0 ||
+                    this._colorTransform.greenMultiplier !== 1.0 ||
+                    this._colorTransform.blueMultiplier !== 1.0) {
+                    if (this._material === null) {
+                        this._material = new THREE.MeshBasicMaterial();
+                        this._material.copy(textureAtlasData.material);
+                    }
+                    this._material.opacity = alpha;
+                    this._material.color.setRGB(this._colorTransform.redMultiplier, this._colorTransform.greenMultiplier, this._colorTransform.blueMultiplier);
+                    meshDisplay.material = this._material;
+                }
+                else {
+                    meshDisplay.material = textureAtlasData.material;
+                }
             }
             // TODO child armature.
         };
-        PixiSlot.prototype._updateFrame = function () {
-            var currentTextureData = this._textureData;
-            if (this._displayIndex >= 0 && this._display !== null && currentTextureData !== null) {
-                var currentTextureAtlasData = currentTextureData.parent;
-                if (this._armature.replacedTexture !== null) { // Update replaced texture atlas.
-                    if (this._armature._replaceTextureAtlasData === null) {
-                        currentTextureAtlasData = dragonBones.BaseObject.borrowObject(dragonBones.PixiTextureAtlasData);
-                        currentTextureAtlasData.copyFrom(currentTextureData.parent);
-                        currentTextureAtlasData.renderTexture = this._armature.replacedTexture;
-                        this._armature._replaceTextureAtlasData = currentTextureAtlasData;
-                    }
-                    else {
-                        currentTextureAtlasData = this._armature._replaceTextureAtlasData;
-                    }
-                    currentTextureData = currentTextureAtlasData.getTexture(currentTextureData.name);
-                }
-                var renderTexture = currentTextureData.renderTexture;
+        ThreeSlot.prototype._updateFrame = function () {
+            var textureData = this._textureData;
+            var meshDisplay = this._renderDisplay;
+            if (textureData !== null) {
+                var textureAtlasData = textureData.parent;
+                var renderTexture = textureAtlasData.renderTexture;
                 if (renderTexture !== null) {
+                    var textureAtlasWidth = textureAtlasData.width > 0.0 ? textureAtlasData.width : renderTexture.image.width;
+                    var textureAtlasHeight = textureAtlasData.height > 0.0 ? textureAtlasData.height : renderTexture.image.height;
+                    var textureX = textureData.region.x;
+                    var textureY = textureData.region.y;
+                    var textureWidth = textureData.region.width;
+                    var textureHeight = textureData.region.height;
+                    var geometry = meshDisplay.geometry;
+                    var vertices = geometry.vertices;
+                    var faces = geometry.faces;
+                    var faceVertexUVs = geometry.faceVertexUvs[0];
+                    this._clearGeometry(geometry);
                     if (this._geometryData !== null) { // Mesh.
                         var data = this._geometryData.data;
                         var intArray = data.intArray;
@@ -15656,67 +15641,84 @@ var dragonBones;
                             vertexOffset += 65536; // Fixed out of bouds bug. 
                         }
                         var uvOffset = vertexOffset + vertexCount * 2;
+                        var indexOffset = this._geometryData.offset + 4 /* GeometryVertexIndices */;
                         var scale = this._armature._armatureData.scale;
-                        var meshDisplay = this._renderDisplay;
-                        var textureAtlasWidth = currentTextureAtlasData.width > 0.0 ? currentTextureAtlasData.width : renderTexture.baseTexture.width;
-                        var textureAtlasHeight = currentTextureAtlasData.height > 0.0 ? currentTextureAtlasData.height : renderTexture.baseTexture.height;
-                        var region = currentTextureData.region;
-                        meshDisplay.vertices = new Float32Array(vertexCount * 2);
-                        meshDisplay.uvs = new Float32Array(vertexCount * 2);
-                        meshDisplay.indices = new Uint16Array(triangleCount * 3);
-                        for (var i = 0, l = vertexCount * 2; i < l; ++i) {
-                            meshDisplay.vertices[i] = floatArray[vertexOffset + i] * scale;
-                        }
-                        for (var i = 0; i < triangleCount * 3; ++i) {
-                            meshDisplay.indices[i] = intArray[this._geometryData.offset + 4 /* GeometryVertexIndices */ + i];
-                        }
-                        for (var i = 0, l = vertexCount * 2; i < l; i += 2) {
-                            var u = floatArray[uvOffset + i];
-                            var v = floatArray[uvOffset + i + 1];
-                            if (currentTextureData.rotated) {
-                                meshDisplay.uvs[i] = (region.x + (1.0 - v) * region.width) / textureAtlasWidth;
-                                meshDisplay.uvs[i + 1] = (region.y + u * region.height) / textureAtlasHeight;
+                        var uvs = new Array();
+                        for (var i = 0, l = vertexCount; i < l; ++i) {
+                            var vertex = dragonBones.ThreeFactory.create(dragonBones.ThreeFactory.POOL_TYPE_VECTOR3);
+                            var uv = dragonBones.ThreeFactory.create(dragonBones.ThreeFactory.POOL_TYPE_VECTOR2);
+                            vertices.push(vertex);
+                            uvs.push(uv);
+                            uv.set(floatArray[uvOffset + i], floatArray[uvOffset + i + 1]);
+                            vertex.set(floatArray[vertexOffset + i] * scale, floatArray[vertexOffset + i + 1] * scale, 0.0);
+                            if (textureData.rotated) {
+                                uv.set((textureX + (1.0 - uv.y) * textureWidth) / textureAtlasWidth, (textureY + uv.x * textureHeight) / textureAtlasHeight);
                             }
                             else {
-                                meshDisplay.uvs[i] = (region.x + u * region.width) / textureAtlasWidth;
-                                meshDisplay.uvs[i + 1] = (region.y + v * region.height) / textureAtlasHeight;
+                                uv.set((textureX + uv.x * textureWidth) / textureAtlasWidth, 1.0 - (textureY + uv.y * textureHeight) / textureAtlasHeight);
                             }
                         }
-                        this._textureScale = 1.0;
-                        meshDisplay.texture = renderTexture;
-                        meshDisplay.dirty++;
-                        meshDisplay.indexDirty++;
-                        var isSkinned = this._geometryData.weight !== null;
-                        var isSurface = this._parent._boneData.type !== 0 /* Bone */;
-                        if (isSkinned || isSurface) {
-                            this._identityTransform();
+                        for (var i = 0; i < triangleCount; ++i) {
+                            var iT = i * 3;
+                            var face3 = dragonBones.ThreeFactory.create(dragonBones.ThreeFactory.POOL_TYPE_FACE3);
+                            var faceUVs = [];
+                            faces.push(face3);
+                            faceVertexUVs.push(faceUVs);
+                            face3.a = intArray[indexOffset + iT];
+                            face3.b = intArray[indexOffset + iT + 1];
+                            face3.c = intArray[indexOffset + iT + 2];
+                            faceUVs[0] = uvs[face3.a];
+                            faceUVs[1] = uvs[face3.b];
+                            faceUVs[2] = uvs[face3.c];
                         }
+                        // this._clearMesh(geometry, vertexCount, triangleCount);
                     }
                     else { // Normal texture.
-                        this._textureScale = currentTextureData.parent.scale * this._armature._armatureData.scale;
-                        var normalDisplay = this._renderDisplay;
-                        normalDisplay.texture = renderTexture;
+                        var scale = textureAtlasData.scale * this._armature._armatureData.scale;
+                        var rawUVs = ThreeSlot.RAW_UVS;
+                        var rawIndices = ThreeSlot.RAW_INDICES;
+                        var uvs = new Array();
+                        for (var i = 0; i < 4; ++i) {
+                            var iD = i * 2;
+                            var vertex = dragonBones.ThreeFactory.create(dragonBones.ThreeFactory.POOL_TYPE_VECTOR3);
+                            var uv = dragonBones.ThreeFactory.create(dragonBones.ThreeFactory.POOL_TYPE_VECTOR2);
+                            vertices.push(vertex);
+                            uvs.push(uv);
+                            uv.set(rawUVs[iD], rawUVs[iD + 1]);
+                            vertex.set((uv.x * textureWidth * scale) - this._pivotX, (uv.y * textureHeight * scale) - this._pivotY, 0.0);
+                            if (textureData.rotated) {
+                                uv.set((textureX + (1.0 - uv.y) * textureWidth) / textureAtlasWidth, (textureY + uv.x * textureHeight) / textureAtlasHeight);
+                            }
+                            else {
+                                uv.set((textureX + uv.x * textureWidth) / textureAtlasWidth, 1.0 - (textureY + uv.y * textureHeight) / textureAtlasHeight);
+                            }
+                        }
+                        for (var i = 0; i < 2; ++i) {
+                            var iT = i * 3;
+                            var face3 = dragonBones.ThreeFactory.create(dragonBones.ThreeFactory.POOL_TYPE_FACE3);
+                            var faceUVs = [];
+                            faces.push(face3);
+                            faceVertexUVs.push(faceUVs);
+                            face3.a = rawIndices[iT];
+                            face3.b = rawIndices[iT + 1];
+                            face3.c = rawIndices[iT + 2];
+                            faceUVs[0] = uvs[face3.a];
+                            faceUVs[1] = uvs[face3.b];
+                            faceUVs[2] = uvs[face3.c];
+                        }
                     }
+                    if (this._material !== null) {
+                        this._material.copy(textureAtlasData.material);
+                    }
+                    meshDisplay.material = textureAtlasData.material;
                     this._visibleDirty = true;
                     return;
                 }
             }
-            if (this._geometryData !== null) {
-                var meshDisplay = this._renderDisplay;
-                meshDisplay.texture = null;
-                meshDisplay.x = 0.0;
-                meshDisplay.y = 0.0;
-                meshDisplay.visible = false;
-            }
-            else {
-                var normalDisplay = this._renderDisplay;
-                normalDisplay.texture = null;
-                normalDisplay.x = 0.0;
-                normalDisplay.y = 0.0;
-                normalDisplay.visible = false;
-            }
+            meshDisplay.visible = false;
+            meshDisplay.position.set(0.0, 0.0, meshDisplay.position.z);
         };
-        PixiSlot.prototype._updateMesh = function () {
+        ThreeSlot.prototype._updateMesh = function () {
             var scale = this._armature._armatureData.scale;
             var deformVertices = this._displayFrame.deformVertices;
             var bones = this._geometryBones;
@@ -15724,6 +15726,8 @@ var dragonBones;
             var weightData = geometryData.weight;
             var hasDeform = deformVertices.length > 0 && geometryData.inheritDeform;
             var meshDisplay = this._renderDisplay;
+            var geometry = meshDisplay.geometry;
+            var vertices = geometry.vertices;
             if (weightData !== null) {
                 var data = geometryData.data;
                 var intArray = data.intArray;
@@ -15731,9 +15735,9 @@ var dragonBones;
                 var vertexCount = intArray[geometryData.offset + 0 /* GeometryVertexCount */];
                 var weightFloatOffset = intArray[weightData.offset + 1 /* WeigthFloatOffset */];
                 if (weightFloatOffset < 0) {
-                    weightFloatOffset += 65536; // Fixed out of bouds bug. 
+                    weightFloatOffset += 65536; // Fixed out of bounds bug. 
                 }
-                for (var i = 0, iD = 0, iB = weightData.offset + 2 /* WeigthBoneIndices */ + bones.length, iV = weightFloatOffset, iF = 0; i < vertexCount; ++i) {
+                for (var i = 0, iB = weightData.offset + 2 /* WeigthBoneIndices */ + bones.length, iV = weightFloatOffset, iF = 0; i < vertexCount; ++i) {
                     var boneCount = intArray[iB++];
                     var xG = 0.0, yG = 0.0;
                     for (var j = 0; j < boneCount; ++j) {
@@ -15752,11 +15756,11 @@ var dragonBones;
                             yG += (matrix.b * xL + matrix.d * yL + matrix.ty) * weight;
                         }
                     }
-                    meshDisplay.vertices[iD++] = xG;
-                    meshDisplay.vertices[iD++] = yG;
+                    var vertex = vertices[i];
+                    vertex.set(xG, yG, 0.0);
                 }
             }
-            else {
+            else if (hasDeform) {
                 var isSurface = this._parent._boneData.type !== 0 /* Bone */;
                 var data = geometryData.data;
                 var intArray = data.intArray;
@@ -15764,66 +15768,41 @@ var dragonBones;
                 var vertexCount = intArray[geometryData.offset + 0 /* GeometryVertexCount */];
                 var vertexOffset = intArray[geometryData.offset + 2 /* GeometryFloatOffset */];
                 if (vertexOffset < 0) {
-                    vertexOffset += 65536; // Fixed out of bouds bug. 
+                    vertexOffset += 65536; // Fixed out of bounds bug. 
                 }
                 for (var i = 0, l = vertexCount * 2; i < l; i += 2) {
-                    var x = floatArray[vertexOffset + i] * scale;
-                    var y = floatArray[vertexOffset + i + 1] * scale;
-                    if (hasDeform) {
-                        x += deformVertices[i];
-                        y += deformVertices[i + 1];
-                    }
+                    var x = floatArray[vertexOffset + i] * scale + deformVertices[i];
+                    var y = floatArray[vertexOffset + i + 1] * scale + deformVertices[i + 1];
+                    var vertex = vertices[i];
                     if (isSurface) {
                         var matrix = this._parent._getGlobalTransformMatrix(x, y);
-                        meshDisplay.vertices[i] = matrix.a * x + matrix.c * y + matrix.tx;
-                        meshDisplay.vertices[i + 1] = matrix.b * x + matrix.d * y + matrix.ty;
+                        vertex.set(matrix.a * x + matrix.c * y + matrix.tx, matrix.b * x + matrix.d * y + matrix.ty, 0.0);
                     }
                     else {
-                        meshDisplay.vertices[i] = x;
-                        meshDisplay.vertices[i + 1] = y;
+                        vertex.set(x, y, 0.0);
                     }
                 }
             }
         };
-        PixiSlot.prototype._updateTransform = function () {
-            throw new Error();
+        ThreeSlot.prototype._updateTransform = function () {
+            var globalTransformMatrix = this.globalTransformMatrix;
+            var displayMatrixElements = this._renderDisplay.matrix.elements;
+            displayMatrixElements[0] = globalTransformMatrix.a;
+            displayMatrixElements[1] = globalTransformMatrix.b;
+            displayMatrixElements[4] = globalTransformMatrix.c;
+            displayMatrixElements[5] = globalTransformMatrix.d;
+            displayMatrixElements[12] = globalTransformMatrix.tx;
+            displayMatrixElements[13] = globalTransformMatrix.ty;
+            this._renderDisplay.matrixWorldNeedsUpdate = true;
         };
-        PixiSlot.prototype._updateTransformV3 = function () {
-            this.updateGlobalTransform(); // Update transform.
-            var transform = this.global;
-            if (this._renderDisplay === this._rawDisplay || this._renderDisplay === this._meshDisplay) {
-                var x = transform.x - (this.globalTransformMatrix.a * this._pivotX + this.globalTransformMatrix.c * this._pivotY);
-                var y = transform.y - (this.globalTransformMatrix.b * this._pivotX + this.globalTransformMatrix.d * this._pivotY);
-                this._renderDisplay.setTransform(x, y, transform.scaleX * this._textureScale, transform.scaleY * this._textureScale, transform.rotation, transform.skew, 0.0);
-            }
-            else {
-                this._renderDisplay.position.set(transform.x, transform.y);
-                this._renderDisplay.rotation = transform.rotation;
-                this._renderDisplay.skew.set(transform.skew, 0.0);
-                this._renderDisplay.scale.set(transform.scaleX, transform.scaleY);
-            }
+        ThreeSlot.prototype._identityTransform = function () {
+            this._renderDisplay.matrix.identity();
         };
-        PixiSlot.prototype._updateTransformV4 = function () {
-            this.updateGlobalTransform(); // Update transform.
-            var transform = this.global;
-            if (this._renderDisplay === this._rawDisplay || this._renderDisplay === this._meshDisplay) {
-                var x = transform.x - (this.globalTransformMatrix.a * this._pivotX + this.globalTransformMatrix.c * this._pivotY);
-                var y = transform.y - (this.globalTransformMatrix.b * this._pivotX + this.globalTransformMatrix.d * this._pivotY);
-                this._renderDisplay.setTransform(x, y, transform.scaleX * this._textureScale, transform.scaleY * this._textureScale, transform.rotation, -transform.skew, 0.0);
-            }
-            else {
-                this._renderDisplay.position.set(transform.x, transform.y);
-                this._renderDisplay.rotation = transform.rotation;
-                this._renderDisplay.skew.set(-transform.skew, 0.0);
-                this._renderDisplay.scale.set(transform.scaleX, transform.scaleY);
-            }
-        };
-        PixiSlot.prototype._identityTransform = function () {
-            this._renderDisplay.setTransform(0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0);
-        };
-        return PixiSlot;
+        ThreeSlot.RAW_UVS = [0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0];
+        ThreeSlot.RAW_INDICES = [0, 1, 2, 3, 2, 1];
+        return ThreeSlot;
     }(dragonBones.Slot));
-    dragonBones.PixiSlot = PixiSlot;
+    dragonBones.ThreeSlot = ThreeSlot;
 })(dragonBones || (dragonBones = {}));
 /**
  * The MIT License (MIT)
@@ -15850,35 +15829,77 @@ var dragonBones;
 var dragonBones;
 (function (dragonBones) {
     /**
-     * - The PixiJS factory.
+     * - The ThreeJS factory.
      * @version DragonBones 3.0
      * @language en_US
      */
     /**
-     * - PixiJS 工厂。
+     * - ThreeJS 工厂。
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    var PixiFactory = /** @class */ (function (_super) {
-        __extends(PixiFactory, _super);
+    var ThreeFactory = /** @class */ (function (_super) {
+        __extends(ThreeFactory, _super);
         /**
          * @inheritDoc
          */
-        function PixiFactory(dataParser) {
+        function ThreeFactory(dataParser) {
             if (dataParser === void 0) { dataParser = null; }
             var _this = _super.call(this, dataParser) || this;
-            if (PixiFactory._dragonBonesInstance === null) {
-                var eventManager = new dragonBones.PixiArmatureDisplay();
-                PixiFactory._dragonBonesInstance = new dragonBones.DragonBones(eventManager);
-                PIXI.ticker.shared.add(PixiFactory._clockHandler, PixiFactory);
+            if (ThreeFactory._dragonBonesInstance === null) {
+                ThreeFactory._dragonBonesInstance = ThreeFactory._createDragonBones();
             }
-            _this._dragonBones = PixiFactory._dragonBonesInstance;
+            _this._dragonBones = ThreeFactory._dragonBonesInstance;
             return _this;
         }
-        PixiFactory._clockHandler = function (passedTime) {
-            this._dragonBonesInstance.advanceTime(PIXI.ticker.shared.elapsedMS * passedTime * 0.001);
+        ThreeFactory._createDragonBones = function () {
+            var eventManager = new dragonBones.ThreeArmatureDisplay();
+            var dragonBonesInstance = new dragonBones.DragonBones(eventManager);
+            return dragonBonesInstance;
         };
-        Object.defineProperty(PixiFactory, "factory", {
+        /**
+         * @private
+         */
+        ThreeFactory.create = function (type) {
+            var pool;
+            if (type in ThreeFactory._pools) {
+                pool = ThreeFactory._pools[type];
+            }
+            else {
+                pool = ThreeFactory._pools[type] = [];
+            }
+            if (pool.length > 0) {
+                return pool.pop();
+            }
+            switch (type) {
+                case ThreeFactory.POOL_TYPE_VECTOR2:
+                    return new THREE.Vector2();
+                case ThreeFactory.POOL_TYPE_VECTOR3:
+                    return new THREE.Vector3();
+                case ThreeFactory.POOL_TYPE_FACE3:
+                    return new THREE.Face3(0, 1, 2);
+            }
+            throw new Error();
+        };
+        /**
+         * @private
+         */
+        ThreeFactory.release = function (object, type) {
+            var pool;
+            if (type in ThreeFactory._pools) {
+                pool = ThreeFactory._pools[type];
+            }
+            else {
+                pool = ThreeFactory._pools[type] = [];
+            }
+            if (pool.indexOf(object) < 0) {
+                pool.push(object);
+            }
+            else {
+                throw new Error();
+            }
+        };
+        Object.defineProperty(ThreeFactory, "factory", {
             /**
              * - A global factory instance that can be used directly.
              * @version DragonBones 4.7
@@ -15890,32 +15911,45 @@ var dragonBones;
              * @language zh_CN
              */
             get: function () {
-                if (PixiFactory._factory === null) {
-                    PixiFactory._factory = new PixiFactory();
+                if (ThreeFactory._factory === null) {
+                    ThreeFactory._factory = new ThreeFactory();
                 }
-                return PixiFactory._factory;
+                return ThreeFactory._factory;
             },
             enumerable: true,
             configurable: true
         });
-        PixiFactory.prototype._buildTextureAtlasData = function (textureAtlasData, textureAtlas) {
+        ThreeFactory.prototype._buildTextureAtlasData = function (textureAtlasData, textureAtlas) {
             if (textureAtlasData) {
                 textureAtlasData.renderTexture = textureAtlas;
+                var material = new THREE.MeshBasicMaterial();
+                material.side = THREE.DoubleSide;
+                material.transparent = true;
+                if (textureAtlas !== null) {
+                    material.map = textureAtlas;
+                }
+                textureAtlasData.material = material;
             }
             else {
-                textureAtlasData = dragonBones.BaseObject.borrowObject(dragonBones.PixiTextureAtlasData);
+                textureAtlasData = dragonBones.BaseObject.borrowObject(dragonBones.ThreeTextureAtlasData);
             }
             return textureAtlasData;
         };
-        PixiFactory.prototype._buildArmature = function (dataPackage) {
+        ThreeFactory.prototype._buildArmature = function (dataPackage) {
             var armature = dragonBones.BaseObject.borrowObject(dragonBones.Armature);
-            var armatureDisplay = new dragonBones.PixiArmatureDisplay();
+            var armatureDisplay = new dragonBones.ThreeArmatureDisplay();
             armature.init(dataPackage.armature, armatureDisplay, armatureDisplay, this._dragonBones);
             return armature;
         };
-        PixiFactory.prototype._buildSlot = function (_dataPackage, slotData, armature) {
-            var slot = dragonBones.BaseObject.borrowObject(dragonBones.PixiSlot);
-            slot.init(slotData, armature, new PIXI.Sprite(), new PIXI.mesh.Mesh(null, null, null, null, PIXI.mesh.Mesh.DRAW_MODES.TRIANGLES));
+        ThreeFactory.prototype._buildSlot = function (dataPackage, slotData, armature) {
+            // tslint:disable-next-line:no-unused-expression
+            dataPackage;
+            // tslint:disable-next-line:no-unused-expression
+            armature;
+            var slot = dragonBones.BaseObject.borrowObject(dragonBones.ThreeSlot);
+            var geometry = new THREE.Geometry();
+            var rawDisplay = new THREE.Mesh(geometry, ThreeFactory._emptyMaterial);
+            slot.init(slotData, armature, rawDisplay, rawDisplay);
             return slot;
         };
         /**
@@ -15925,8 +15959,6 @@ var dragonBones;
          * @param dragonBonesName - The cached name of the DragonBonesData instance. (If not set, all DragonBonesData instances are retrieved, and when multiple DragonBonesData instances contain a the same name armature data, it may not be possible to accurately create a specific armature)
          * @param skinName - The skin name, you can set a different ArmatureData name to share it's skin data. (If not set, use the default skin data)
          * @returns The armature display container.
-         * @see dragonBones.IArmatureProxy
-         * @see dragonBones.BaseFactory#buildArmature
          * @version DragonBones 4.5
          * @example
          * <pre>
@@ -15941,8 +15973,6 @@ var dragonBones;
          * @param dragonBonesName - DragonBonesData 实例的缓存名称。 （如果未设置，将检索所有的 DragonBonesData 实例，当多个 DragonBonesData 实例中包含同名的骨架数据时，可能无法准确的创建出特定的骨架）
          * @param skinName - 皮肤名称，可以设置一个其他骨架数据名称来共享其皮肤数据。 （如果未设置，则使用默认的皮肤数据）
          * @returns 骨架的显示容器。
-         * @see dragonBones.IArmatureProxy
-         * @see dragonBones.BaseFactory#buildArmature
          * @version DragonBones 4.5
          * @example
          * <pre>
@@ -15950,7 +15980,7 @@ var dragonBones;
          * </pre>
          * @language zh_CN
          */
-        PixiFactory.prototype.buildArmatureDisplay = function (armatureName, dragonBonesName, skinName, textureAtlasName) {
+        ThreeFactory.prototype.buildArmatureDisplay = function (armatureName, dragonBonesName, skinName, textureAtlasName) {
             if (dragonBonesName === void 0) { dragonBonesName = ""; }
             if (skinName === void 0) { skinName = ""; }
             if (textureAtlasName === void 0) { textureAtlasName = ""; }
@@ -15975,15 +16005,20 @@ var dragonBones;
          * @version DragonBones 3.0
          * @language zh_CN
          */
-        PixiFactory.prototype.getTextureDisplay = function (textureName, textureAtlasName) {
+        ThreeFactory.prototype.getTextureDisplay = function (textureName, textureAtlasName) {
             if (textureAtlasName === void 0) { textureAtlasName = null; }
             var textureData = this._getTextureData(textureAtlasName !== null ? textureAtlasName : "", textureName);
-            if (textureData !== null && textureData.renderTexture !== null) {
-                return new PIXI.Sprite(textureData.renderTexture);
+            if (textureData !== null) {
+                var textureAtlasData = textureData.parent;
+                if (textureAtlasData.renderTexture !== null) {
+                    var material = new THREE.SpriteMaterial({ map: textureAtlasData.renderTexture });
+                    var sprite = new THREE.Sprite(material);
+                    return sprite;
+                }
             }
             return null;
         };
-        Object.defineProperty(PixiFactory.prototype, "soundEventManager", {
+        Object.defineProperty(ThreeFactory.prototype, "soundEventManager", {
             /**
              * - A global sound event manager.
              * Sound events can be listened to uniformly from the manager.
@@ -16002,9 +16037,23 @@ var dragonBones;
             enumerable: true,
             configurable: true
         });
-        PixiFactory._dragonBonesInstance = null;
-        PixiFactory._factory = null;
-        return PixiFactory;
+        /**
+         * @private
+         */
+        ThreeFactory.POOL_TYPE_VECTOR2 = "POOL_TYPE_VECTOR2";
+        /**
+         * @private
+         */
+        ThreeFactory.POOL_TYPE_VECTOR3 = "POOL_TYPE_VECTOR3";
+        /**
+         * @private
+         */
+        ThreeFactory.POOL_TYPE_FACE3 = "POOL_TYPE_FACE3";
+        ThreeFactory._emptyMaterial = new THREE.MeshBasicMaterial();
+        ThreeFactory._pools = {};
+        ThreeFactory._dragonBonesInstance = null;
+        ThreeFactory._factory = null;
+        return ThreeFactory;
     }(dragonBones.BaseFactory));
-    dragonBones.PixiFactory = PixiFactory;
+    dragonBones.ThreeFactory = ThreeFactory;
 })(dragonBones || (dragonBones = {}));

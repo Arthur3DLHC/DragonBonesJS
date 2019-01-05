@@ -6263,17 +6263,21 @@ declare namespace dragonBones {
  */
 declare namespace dragonBones {
     /**
-     * - The PixiJS texture atlas data.
+     * - The ThreeJS texture atlas data.
      * @version DragonBones 3.0
      * @language en_US
      */
     /**
-     * - PixiJS 贴图集数据。
+     * - ThreeJS 贴图集数据。
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    class PixiTextureAtlasData extends TextureAtlasData {
+    class ThreeTextureAtlasData extends TextureAtlasData {
         static toString(): string;
+        /**
+         * @private
+         */
+        material: THREE.MeshBasicMaterial;
         private _renderTexture;
         protected _onClear(): void;
         /**
@@ -6281,16 +6285,16 @@ declare namespace dragonBones {
          */
         createTexture(): TextureData;
         /**
-         * - The PixiJS texture.
+         * - The ThreeJS texture.
          * @version DragonBones 3.0
          * @language en_US
          */
         /**
-         * - PixiJS 贴图。
+         * - ThreeJS 贴图。
          * @version DragonBones 3.0
          * @language zh_CN
          */
-        renderTexture: PIXI.BaseTexture | null;
+        renderTexture: THREE.Texture | null;
     }
 }
 /**
@@ -6319,7 +6323,7 @@ declare namespace dragonBones {
     /**
      * @inheritDoc
      */
-    class PixiArmatureDisplay extends PIXI.Sprite implements IArmatureProxy {
+    class ThreeArmatureDisplay extends THREE.Group implements IArmatureProxy {
         /**
          * @private
          */
@@ -6344,10 +6348,6 @@ declare namespace dragonBones {
          */
         dispose(disposeProxy?: boolean): void;
         /**
-         * @inheritDoc
-         */
-        destroy(): void;
-        /**
          * @private
          */
         dispatchDBEvent(type: EventStringType, eventObject: EventObject): void;
@@ -6371,6 +6371,18 @@ declare namespace dragonBones {
          * @inheritDoc
          */
         readonly animation: Animation;
+        /**
+         * @inheritDoc
+         */
+        hasEvent(type: EventStringType): boolean;
+        /**
+         * @inheritDoc
+         */
+        addEvent(type: EventStringType, listener: (event: EventObject) => void, target: any): void;
+        /**
+         * @inheritDoc
+         */
+        removeEvent(type: EventStringType, listener: (event: EventObject) => void, target: any): void;
     }
 }
 /**
@@ -6397,20 +6409,23 @@ declare namespace dragonBones {
  */
 declare namespace dragonBones {
     /**
-     * - The PixiJS slot.
+     * - The ThreeJS slot.
      * @version DragonBones 3.0
      * @language en_US
      */
     /**
-     * - PixiJS 插槽。
+     * - ThreeJS 插槽。
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    class PixiSlot extends Slot {
+    class ThreeSlot extends Slot {
         static toString(): string;
-        private _textureScale;
+        static readonly RAW_UVS: Array<number>;
+        static readonly RAW_INDICES: Array<number>;
         private _renderDisplay;
+        private _material;
         protected _onClear(): void;
+        private _clearGeometry;
         protected _initDisplay(value: any, isRetain: boolean): void;
         protected _disposeDisplay(value: any, isRelease: boolean): void;
         protected _onUpdateDisplay(): void;
@@ -6423,8 +6438,6 @@ declare namespace dragonBones {
         protected _updateFrame(): void;
         protected _updateMesh(): void;
         protected _updateTransform(): void;
-        protected _updateTransformV3(): void;
-        protected _updateTransformV4(): void;
         protected _identityTransform(): void;
     }
 }
@@ -6452,19 +6465,41 @@ declare namespace dragonBones {
  */
 declare namespace dragonBones {
     /**
-     * - The PixiJS factory.
+     * - The ThreeJS factory.
      * @version DragonBones 3.0
      * @language en_US
      */
     /**
-     * - PixiJS 工厂。
+     * - ThreeJS 工厂。
      * @version DragonBones 3.0
      * @language zh_CN
      */
-    class PixiFactory extends BaseFactory {
+    class ThreeFactory extends BaseFactory {
+        /**
+         * @private
+         */
+        static readonly POOL_TYPE_VECTOR2: string;
+        /**
+         * @private
+         */
+        static readonly POOL_TYPE_VECTOR3: string;
+        /**
+         * @private
+         */
+        static readonly POOL_TYPE_FACE3: string;
+        private static readonly _emptyMaterial;
+        private static readonly _pools;
         private static _dragonBonesInstance;
         private static _factory;
-        private static _clockHandler;
+        private static _createDragonBones;
+        /**
+         * @private
+         */
+        static create<T>(type: string): T;
+        /**
+         * @private
+         */
+        static release(object: any, type: string): void;
         /**
          * - A global factory instance that can be used directly.
          * @version DragonBones 4.7
@@ -6475,14 +6510,14 @@ declare namespace dragonBones {
          * @version DragonBones 4.7
          * @language zh_CN
          */
-        static readonly factory: PixiFactory;
+        static readonly factory: ThreeFactory;
         /**
          * @inheritDoc
          */
         constructor(dataParser?: DataParser | null);
-        protected _buildTextureAtlasData(textureAtlasData: PixiTextureAtlasData | null, textureAtlas: PIXI.BaseTexture | null): PixiTextureAtlasData;
+        protected _buildTextureAtlasData(textureAtlasData: ThreeTextureAtlasData | null, textureAtlas: THREE.Texture | null): TextureAtlasData;
         protected _buildArmature(dataPackage: BuildArmaturePackage): Armature;
-        protected _buildSlot(_dataPackage: BuildArmaturePackage, slotData: SlotData, armature: Armature): Slot;
+        protected _buildSlot(dataPackage: BuildArmaturePackage, slotData: SlotData, armature: Armature): Slot;
         /**
          * - Create a armature from cached DragonBonesData instances and TextureAtlasData instances, then use the {@link #clock} to update it.
          * The difference is that the armature created by {@link #buildArmature} is not WorldClock instance update.
@@ -6490,8 +6525,6 @@ declare namespace dragonBones {
          * @param dragonBonesName - The cached name of the DragonBonesData instance. (If not set, all DragonBonesData instances are retrieved, and when multiple DragonBonesData instances contain a the same name armature data, it may not be possible to accurately create a specific armature)
          * @param skinName - The skin name, you can set a different ArmatureData name to share it's skin data. (If not set, use the default skin data)
          * @returns The armature display container.
-         * @see dragonBones.IArmatureProxy
-         * @see dragonBones.BaseFactory#buildArmature
          * @version DragonBones 4.5
          * @example
          * <pre>
@@ -6506,8 +6539,6 @@ declare namespace dragonBones {
          * @param dragonBonesName - DragonBonesData 实例的缓存名称。 （如果未设置，将检索所有的 DragonBonesData 实例，当多个 DragonBonesData 实例中包含同名的骨架数据时，可能无法准确的创建出特定的骨架）
          * @param skinName - 皮肤名称，可以设置一个其他骨架数据名称来共享其皮肤数据。 （如果未设置，则使用默认的皮肤数据）
          * @returns 骨架的显示容器。
-         * @see dragonBones.IArmatureProxy
-         * @see dragonBones.BaseFactory#buildArmature
          * @version DragonBones 4.5
          * @example
          * <pre>
@@ -6515,7 +6546,7 @@ declare namespace dragonBones {
          * </pre>
          * @language zh_CN
          */
-        buildArmatureDisplay(armatureName: string, dragonBonesName?: string, skinName?: string, textureAtlasName?: string): PixiArmatureDisplay | null;
+        buildArmatureDisplay(armatureName: string, dragonBonesName?: string, skinName?: string, textureAtlasName?: string): ThreeArmatureDisplay | null;
         /**
          * - Create the display object with the specified texture.
          * @param textureName - The texture data name.
@@ -6530,7 +6561,7 @@ declare namespace dragonBones {
          * @version DragonBones 3.0
          * @language zh_CN
          */
-        getTextureDisplay(textureName: string, textureAtlasName?: string | null): PIXI.Sprite | null;
+        getTextureDisplay(textureName: string, textureAtlasName?: string | null): THREE.Sprite | null;
         /**
          * - A global sound event manager.
          * Sound events can be listened to uniformly from the manager.
@@ -6543,6 +6574,6 @@ declare namespace dragonBones {
          * @version DragonBones 4.5
          * @language zh_CN
          */
-        readonly soundEventManager: PixiArmatureDisplay;
+        readonly soundEventManager: ThreeArmatureDisplay;
     }
 }

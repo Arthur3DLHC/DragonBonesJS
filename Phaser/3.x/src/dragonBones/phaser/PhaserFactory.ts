@@ -83,6 +83,7 @@ namespace dragonBones {
 
         protected _buildTextureAtlasData(textureAtlasData: PhaserTextureAtlasData | null, textureAtlas: Phaser.Textures.Texture): PhaserTextureAtlasData {
             if (textureAtlasData) {
+                const tex = this._scene.textures.addImage(textureAtlasData.name, textureAtlas);
                 textureAtlasData.renderTexture = textureAtlas;
             }
             else {
